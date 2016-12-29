@@ -22,7 +22,7 @@ prepreqs-{{cfg.name}}:
 {{cfg.name}}-lxc-ci:
   mc_git.latest:
     - target: /srv/gitlabci-lxc/
-    - name: /srv/gitlabci-lxc/
+    - name: "https://github.com/makinacorpus/gitlabci-lxc.git"
     - rev: master
 {% endif %}
 
