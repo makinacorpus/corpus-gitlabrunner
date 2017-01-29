@@ -1,0 +1,48 @@
+#
+# This file contains default values which are used
+# by the salt states deploying your project.
+# you may copy them to your relevant PILLAR file
+# before editing them.
+# If you need to add variables, this is where to begin.
+# Please keep defaults in there, but real passwords
+# must be putted inside pillar
+#
+# replace project_name in your pillar by
+# the current projectname
+# you can also merge parts of this file
+# with the relevant pillar
+#
+# think that dicts are updated/merged with default
+# but lists are overidden
+makina-projects.projectname:
+  data:
+    fixperms_cron_periodicity: "0 */2 * * *"
+    modes: ['lxc']
+    builds_dir: "{data_root}/builds"
+    cache_dir: "{data_root}/cache"
+    runner_config:
+      concurrent: "1"
+      check_interval: "0"
+      runners:
+        name: "{fqdn}"
+        url: "https://gitlab.foo.net"
+        token: xxx
+        executor: ssh
+        ssh: {}
+        #  user: "root"
+        #  host: "localhost"
+        #  identity_file: "/root/.ssh/id_rsa"
+    configs:
+      {% for i in [
+        '/etc/gitlab-runner/config.toml'
+      ] %}
+      "{{i}}":
+        source: "salt://makina-projects/{name}/files/{{i}}"
+        target: "{{i}}"
+        mode: 640
+        user: root
+        group: root
+      {%endfor%}
+      #foo.py:
+      #  target: "{data_root}/test/bar.py"
+# vim:set ft=sls:
