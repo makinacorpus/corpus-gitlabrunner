@@ -1,0 +1,40 @@
+---
+- hosts: all
+  vars:
+    lxc_container_name: "{{lxc}}"
+  roles:
+    - role: corpusops.lxc_sshauth
+    - role: corpusops.lxc_register
+- hosts: "{{lxc}}"
+  tasks:
+    - name: download ms
+      shell: |
+        set -ex
+        if [ ! -e /srv/makina-states ];then
+          git clone \
+            https://github.com/makinacorpus/makina-states.git \
+            /srv/makina-states
+        else
+          cd /srv/makina-states && git stash && git pull
+        fi
+      tags: core_install,core_sync_code,core_sync_code_ms
+    - name: download corpusops
+      shell: |
+        set -ex
+        if [ ! -e /srv/corpusops/corpusops.bootstrap ];then
+          git clone \
+            https://github.com/corpusops/corpusops.bootstrap.git \
+            /srv/corpusops/corpusops.bootstrap
+        else
+          cd /srv/makina-states && git stash && git pull
+        fi
+      tags: core_install,core_sync_code,core_sync_code_ms_co
+    - name: install ms
+      shell: /srv/makina-states/bin/boot-salt2.sh -C
+      tags: core_install,core_install_ms
+    - name: install corpusops
+      shell: /srv/corpusops/corpusops.bootstrap/bin/install.sh -S
+      tags: core_install,core_install_co,core_install_co_install
+    - name: install corpusops roles
+      shell: /srv/corpusops/corpusops.bootstrap/bin/install.sh -s
+      tags: core_install,core_install_co,core_install_co_sync
