@@ -1,0 +1,5 @@
+---
+- hosts: "{{provision_node}}"
+  roles:
+    - corpusops.services_misc_xvfb
+    - corpusops.services_misc_robotframework
