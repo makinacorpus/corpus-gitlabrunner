@@ -33,7 +33,7 @@ makina-projects.projectname:
       #     ssh:
       #       user: "root"
       #       host: "foo.net"
-      #       identity_file: "/home/users/gitlabrunner-user/.ssh/id_rsa" 
+      #       identity_file: "/home/users/gitlabrunner-user/.ssh/id_rsa"
     configs: {}
       {% for i in [
       ] %}

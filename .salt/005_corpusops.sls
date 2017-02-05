@@ -2,8 +2,9 @@
 {% set data = cfg.data %}
 cops-clone:
   mc_git.latest:
-    - name: "https://github.com/corpusops/corpusops.bootstrap.git" 
+    - name: "https://github.com/corpusops/corpusops.bootstrap.git"
     - target : /srv/corpusops/corpusops.bootstrap
+
 cops-install:
   cmd.run:
     - name: /srv/corpusops/corpusops.bootstrap/bin/install.sh
