@@ -1,0 +1,27 @@
+---
+- hosts: all
+  vars:
+    lxc_container_name: "{{lxc}}"
+  roles:
+    - role: corpusops.saltcall
+    - role: corpusops.lxc_register
+- hosts: "{{lxc}}"
+  tasks:
+    - name: pillar
+      copy:
+        dest: /srv/makina-states/pillar/pillar.d/redis.sls
+        content: |
+          ---
+          makina-states.services.db.redis.password: redis
+          makina-states.services.db.redis.redis.bind: 127.0.0.1
+    - name: re config redis - first time may fail
+      saltcall:
+        function: state.sls
+        args: "makina-states.services.db.redis"
+      register: redis_install_1
+    - name: re config redis - first time may fail
+      saltcall:
+        function: state.sls
+        args: "makina-states.services.db.redis" 
+      register: redis_install_2
+      when: "{{redis_install_1.result.retcode != 0}}" 
