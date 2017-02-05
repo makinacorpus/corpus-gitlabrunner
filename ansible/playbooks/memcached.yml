@@ -1,0 +1,19 @@
+---
+- hosts: all
+  vars:
+    lxc_container_name: "{{lxc}}"
+  roles:
+    - role: corpusops.saltcall
+    - role: corpusops.lxc_register
+- hosts: "{{lxc}}"
+  tasks:
+    - name: pillar
+      copy:
+        dest: /srv/makina-states/pillar/pillar.d/memcached.sls
+        content: |
+          ---
+    - name: re config memcached
+      saltcall:
+        function: state.sls
+        args: "makina-states.services.cache.memcached"
+      register: memcached_install_1
