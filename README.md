@@ -1,6 +1,6 @@
-= gitlab runner configuration with makina-states
+# gitlab runner configuration with makina-states
 
-== Services activated on mostly all nodes:
+## Services activated on mostly all nodes:
 - memcached
 - mysql:
   - root password: secret
@@ -15,6 +15,6 @@
 - mongodb
   - db0 -> db9, user & password are the same as the database
 
-== Workers types
-=== drupal
-=== python
+## Workers types
+### drupal
+### python
