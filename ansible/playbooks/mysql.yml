@@ -18,8 +18,8 @@
         dest: /srv/projects/mysql/pillar/init.sls
         content: |
           ---
-          makina-states.services.mysql.root_password: mysql
-          makina-states.services.mysql.bind_address: 127.0.0.1
+          makina-states.services.db.mysql.root_passwd: mysql
+          makina-states.services.db.mysql.bind_address: 127.0.0.1
           makina-projects.mysql:
             api_version: '2'
             data:
@@ -39,13 +39,13 @@
         git reset --hard g/master
     - name: re config mysql - first time may fail
       saltcall:
-        function: mc_project.deploy 
+        function: mc_project.deploy
         args: "only=install,fixperms mysql"
       register: mysql_install_1
       failed_when: False
     - name: re config mysql - first time may fail
       saltcall:
-        function: mc_project.deploy 
+        function: mc_project.deploy
         args: "only=install,fixperms mysql"
       register: mysql_install_2
-      when: "{{mysql_install_1.msg.retcode!=0}}"
+      when: "{{not mysql_install_1.msg.result.status}}"
