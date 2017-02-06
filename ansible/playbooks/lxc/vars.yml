@@ -1,0 +1,24 @@
+---
+# ensure is defined
+#   - lxc_container_name
+#   - corpusops_lxc_backing_store
+#   - corpusops_lxc_path
+#   - corpusops_lxc_from_container
+#
+- hosts: "{{TEST_LXC_HOST | default('all')}}"
+  roles: [corpusops.vars]
+- hosts: "{{TEST_LXC_HOST | default('all')}}"
+  tasks:
+    - name: define corpusops lxc vars
+      include_jinja_vars:
+        content: |
+          ---
+          {% set map_vars = {} %}
+          {% set _ = map_vars.update({
+            'lxc_container_name': TEST_LXC_NAME,
+            'corpusops_lxc_backing_store': TEST_LXC_BACKING_STORE|default('overlayfs'),
+            'corpusops_lxc_from_container': TEST_LXC_TEMPLATE|default('give_a_lxc_template_pls'),
+            'corpusops_lxc_path': TEST_LXC_PATH|default('/var/lib/lxc'),
+          }) %}
+          {{ map_vars | to_json }}
+        name: __GLOBAL__

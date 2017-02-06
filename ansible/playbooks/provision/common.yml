@@ -1,11 +1,5 @@
 ---
-- hosts: all
-  vars:
-    lxc_container_name: "{{lxc}}"
-  roles:
-    - role: corpusops.lxc_sshauth
-    - role: corpusops.lxc_register
-- hosts: "{{lxc}}"
+- hosts: "{{provision_node}}"
   tasks:
     - name: download ms
       shell: |

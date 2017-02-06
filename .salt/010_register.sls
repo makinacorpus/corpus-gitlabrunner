@@ -7,6 +7,8 @@
 {% for runner, rcfg in cfg.data.runner_config.runners.items() %}
 {% set ssh = rcfg.get('ssh', {}) %}
 {% set tags = rcfg.get('tags_list', []) %}
+{% set shell = rcfg.get('shell', 'bash') %}
+{% set executor = rcfg.get('executor', 'shell') %}
 register-runners-{{loop.index}}:
   cmd.run:
     - name: |
@@ -17,16 +19,16 @@ register-runners-{{loop.index}}:
             -u "{{rcfg.url}}" \
             --builds-dir="{{data.builds_dir}}" \
             --cache-dir="{{data.cache_dir}}" \
-            --executor="{{rcfg.executor}}" \
+            --executor="{{executor}}" \
             \{% if tags%}
-            --tag-list="{{",".join(tags)}}"\
-            {% endif%} \
-            \{% if rcfg.executor=='ssh' %}
-            --ssh-host="{{ssh.host}}" \
-            --ssh-user="{{ssh.user}}" \
-            {% if ssh.get('password', '') %}--ssh-password="{{ssh.password}}"{%endif%} \
-            {% if ssh.get('identity_file', '') %}--ssh-identity-file="{{ssh.identity_file}}"{%endif%} \
+            --tag-list="{{",".join(tags)}}" {% endif%} \
+            {% if executor=='shell' and shell %} --shell="{{shell}}"{%endif%} \
+            {% if executor=='ssh' %} --ssh-host="{{ssh.host}}" --ssh-user="{{ssh.user}}" \
+            {% if ssh.get('password', '') %} --ssh-password="{{ssh.password}}"{%endif%} \
+            {% if ssh.get('identity_file', '') %} --ssh-identity-file="{{ssh.identity_file}}" \
             {%endif%} \
+            {%endif%} \
+            # end
     - unless: grep -q '  name = "{{runner}}"' "/etc/gitlab-runner/config.toml"
     - require_in:
         - cmd: {{cfg.name}}-service-register

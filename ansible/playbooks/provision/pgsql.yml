@@ -1,11 +1,5 @@
 ---
-- hosts: all
-  vars:
-    lxc_container_name: "{{lxc}}"
-  roles:
-    - role: corpusops.saltcall
-    - role: corpusops.lxc_register
-- hosts: "{{lxc}}"
+- hosts: "{{provision_node}}"
   tasks:
     - name: create project
       shell: |
@@ -13,6 +7,7 @@
           /srv/makina-states/bin/salt-call --retcode-passthrough\
             mc_project.init_project pgsql
         fi
+      tags: pgsql_install
     - name: pillar
       copy:
         dest: /srv/projects/pgsql/pillar/init.sls
@@ -27,6 +22,7 @@
                {% for i in [0,1,2,3,4,5,6,7,8,9]%}
                - {db{{i}}: {password: "db{{i}}", user: "db{{i}}"}}
                {%endfor%}
+      tags: pgsql_install
     - name: code
       shell: |
         cd /srv/projects/pgsql/project
@@ -35,15 +31,18 @@
         git remote add g https://github.com/makinacorpus/corpus-pgsql.git
         git fetch --all
         git reset --hard g/master
+      tags: pgsql_install
     - name: re config pgsql - first time may fail
       saltcall:
         function: mc_project.deploy
         args: "only=install,fixperms pgsql"
       register: pgsql_install_1
       failed_when: False
+      tags: pgsql_install
     - name: re config pgsql - first time may fail
       saltcall:
         function: mc_project.deploy
         args: "only=install,fixperms pgsql"
       register: pgsql_install_2
       when: "{{not pgsql_install_1.result.status}}"
+      tags: pgsql_install

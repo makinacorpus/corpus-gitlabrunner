@@ -1,0 +1,7 @@
+---
+# Run the project install procedure
+# and make it ready for tests
+- include: "{{GRUNNER_TOP_DIR}}/ansible/playbooks/lxc/register.yml"
+- include: "{{GRUNNER_TOP_DIR}}/ansible/playbooks/lifecycle/setup.yml"
+  vars:
+    test_node: "{{TEST_LXC_NAME}}"

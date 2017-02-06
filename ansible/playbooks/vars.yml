@@ -1,0 +1,23 @@
+---
+# ensure is defined
+#   - ms_project_name
+#   - ms_pillar
+#   - ms_pillar_test
+- hosts: "{{inc_node}}"
+  roles: [corpusops.vars]
+- hosts: "{{inc_node}}"
+  tasks:
+    - name: "define makina-states variables (may be not used)"
+      include_jinja_vars:
+        content: |
+         ---
+         {% set map_vars = {
+           'TEST_USE_MAKINASTATES': ( TEST_USE_MAKINASTATES|default(true) ) | bool,
+         } %}
+         {% set _ = map_vars.update({
+           'ms_project_name': TEST_PROJECT_PATH | cops_basename(-1),
+           'ms_pillar_test': TEST_PROJECT_PATH + '/.salt/'+TEST_PILLAR_FILENAME,
+           'ms_pillar': TEST_PROJECT_PATH + '/../pillar/init.sls',
+         }) %}
+         {{ map_vars | to_json }}
+        name: __GLOBAL__
