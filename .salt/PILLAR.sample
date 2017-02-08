@@ -24,7 +24,7 @@ makina-projects.projectname:
     runner_config:
       concurrent: "1"
       check_interval: "0"
-      runners:
+      runners: {}
       #   "xxx.xxx.net (CI)":
       #     url: "https://gitlab.xxx.net"
       #     token: "xxxx"
@@ -35,8 +35,7 @@ makina-projects.projectname:
       #       host: "foo.net"
       #       identity_file: "/home/users/gitlabrunner-user/.ssh/id_rsa"
     configs: {}
-      {% for i in [
-      ] %}
+      {% for i in [ ] %}
       "{{i}}":
         source: "salt://makina-projects/{name}/files/{{i}}"
         target: "{{i}}"

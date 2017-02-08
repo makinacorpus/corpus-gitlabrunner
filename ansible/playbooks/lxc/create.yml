@@ -1,0 +1,7 @@
+---
+- include: "{{GRUNNER_TOP_DIR}}/ansible/playbooks/lxc/vars.yml"
+- hosts: "{{TEST_LXC_HOST|default('all')}}"
+  roles:
+    - role: corpusops.lxc_create
+
+- include: "{{GRUNNER_TOP_DIR}}/ansible/playbooks/lxc/ssh.yml"

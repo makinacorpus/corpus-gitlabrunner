@@ -1,0 +1,9 @@
+---
+# add dinamically a lxc container to the current
+# ansible inventory.
+# This will allow us to reference the container
+# by its name in further tasks/roles
+- include: "{{GRUNNER_TOP_DIR}}/ansible/playbooks/lxc/vars.yml"
+- hosts: "{{TEST_LXC_HOST|default('all')}}"
+  roles:
+    - role: corpusops.lxc_register

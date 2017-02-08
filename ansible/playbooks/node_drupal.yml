@@ -1,6 +1,0 @@
-- include: "./provision_common.yml"
-- include: "./mysql.yml"
-- include: "./pgsql.yml"
-- include: "./memcached.yml"
-- include: "./redis.yml"
-- include: "./elasticsearch.yml"

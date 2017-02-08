@@ -1,11 +1,5 @@
 ---
-- hosts: all
-  vars:
-    lxc_container_name: "{{lxc}}"
-  roles:
-    - role: corpusops.saltcall
-    - role: corpusops.lxc_register
-- hosts: "{{lxc}}"
+- hosts: "{{provision_node}}"
   tasks:
     - name: create project
       shell: |
@@ -13,6 +7,7 @@
           /srv/makina-states/bin/salt-call --retcode-passthrough\
             mc_project.init_project mysql
         fi
+      tags: mysql_install
     - name: pillar
       copy:
         dest: /srv/projects/mysql/pillar/init.sls
@@ -29,6 +24,7 @@
                {% for i in [0,1,2,3,4,5,6,7,8,9]%}
                - {db{{i}}: {password: "db{{i}}", user: "db{{i}}"}}
                {%endfor%}
+      tags: mysql_install
     - name: code
       shell: |
         cd /srv/projects/mysql/project
@@ -37,15 +33,18 @@
         git remote add g https://github.com/makinacorpus/corpus-mysql.git
         git fetch --all
         git reset --hard g/master
+      tags: mysql_install
     - name: re config mysql - first time may fail
       saltcall:
         function: mc_project.deploy
         args: "only=install,fixperms mysql"
       register: mysql_install_1
       failed_when: False
+      tags: mysql_install
     - name: re config mysql - first time may fail
       saltcall:
         function: mc_project.deploy
         args: "only=install,fixperms mysql"
       register: mysql_install_2
       when: "{{mysql_install_1.result.retcode != 0}}"
+      tags: mysql_install

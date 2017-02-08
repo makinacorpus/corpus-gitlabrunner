@@ -1,0 +1,68 @@
+---
+- hosts: "{{provision_node}}"
+  tasks:
+    - name: create projects
+      shell: |
+        if [ ! -e /srv/projects/{{item}} ];then
+          /srv/makina-states/bin/salt-call --retcode-passthrough\
+            mc_project.init_project {{item}}
+        fi
+      tags: python_install
+      with_items: [django, zope]
+    - name: pillar django
+      copy:
+        dest: /srv/projects/django/pillar/init.sls
+        content: |
+          ---
+          makina-projects.django:
+            data:
+              domain: django.local
+              orig_py: /usr/bin/python3
+              DATABASES:
+               default:
+                 ENGINE: 'django.contrib.gis.db.backends.postgis'
+                 HOST: localhost
+                 USER: db1
+                 NAME: db1
+                 PORT: 5432
+                 PASSWORD: db1
+      tags: python_install
+    - name: pillar zope
+      copy:
+        dest: /srv/projects/zope/pillar/init.sls
+        content: |
+          ---
+          makina-projects.zope:
+            data:
+              domain: zope.local
+      tags: python_install
+    - name: zope - code
+      shell: |
+        cd /srv/projects/zope/project
+        git stash
+        git remote rm g || /bin/true
+        {% if item == 'django' %}
+        git remote add g https://github.com/makinacorpus/corpus-zope-plone.git
+        {% elif item == 'zope' %}
+        git remote add g https://github.com/makinacorpus/corpus-django.git
+        {% endif %}
+        git fetch --all
+        git reset --hard g/master
+      tags: python_install
+      with_items: [django, zope]
+    - name: fixperms
+      saltcall:
+        function: mc_project.deploy
+        args: "{{item}} only=fixperms"
+      with_items: [django, zope]
+    - name: re config project
+      saltcall:
+        function: mc_project.deploy
+        args: >-
+          {{item}}
+          only=install,fixperms
+          only_steps=100_prereqs.sls,700_reverseproxy.sls
+      register: python_install_2
+      with_items: [django, zope]
+      tags: python_install
+

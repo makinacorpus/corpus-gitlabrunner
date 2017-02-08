@@ -1,11 +1,5 @@
 ---
-- hosts: all
-  vars:
-    lxc_container_name: "{{lxc}}"
-  roles:
-    - role: corpusops.saltcall
-    - role: corpusops.lxc_register
-- hosts: "{{lxc}}"
+- hosts: "{{provision_node}}"
   tasks:
     - name: create project
       shell: |
@@ -13,6 +7,7 @@
           /srv/makina-states/bin/salt-call --retcode-passthrough\
             mc_project.init_project elasticsearch
         fi
+      tags: elasticsearch_install
     - name: pillar
       copy:
         dest: /srv/projects/elasticsearch/pillar/init.sls
@@ -23,6 +18,7 @@
             data:
               backup_disabled: true
               use_http_proxy: False
+      tags: elasticsearch_install
     - name: code
       shell: |
         cd /srv/projects/elasticsearch/project
@@ -31,8 +27,10 @@
         git remote add g https://github.com/makinacorpus/corpus-elasticsearch.git
         git fetch --all
         git reset --hard g/master
+      tags: elasticsearch_install
     - name: re config elasticsearch - first time may fail
       saltcall:
         function: mc_project.deploy
         args: "only=install,fixperms elasticsearch"
       register: elasticsearch_install_1
+      tags: elasticsearch_install

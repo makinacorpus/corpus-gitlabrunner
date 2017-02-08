@@ -1,0 +1,49 @@
+variables:
+  TEST_LXC_TEMPLATE: gitlabrunner-drupal
+  GIT_STRATEGY: fetch
+  GIT_SUBMODULE_STRATEGY: recursive
+  COMMIT: "$CI_BUILD_REF"
+  TEST_LXC_NAME: "grunner-$CI_PROJECT_ID-$CI_PIPELINE_ID-$CI_BUILD_ID"
+
+stages:
+  - test
+  - staging
+  - prod
+
+test:
+  stage: test
+  variables:
+    TEST_USE_MAKINASTATES: "true"
+  tags:
+    - makina-states
+    - lxc_drupal
+    - myhostname.makina-corpus.net
+  script:
+    - "env | sort"
+    - sudo -E /srv/projects/gitlabrunner/project/bin/lxc_run.sh
+  except:
+    - staging
+    - production
+
+staging:
+  stage: staging
+  environment:
+     name: staging
+     url: "https://staging.example.com"
+  tags: []
+  script:
+    - echo "no staging procedure defined"
+  only:
+    - staging
+
+prod:
+  stage: prod
+  environment:
+     name: production
+     url: "https://example.com"
+  tags: []
+  script:
+    - echo "no prod procedure defined"
+  when: manual
+  only:
+    - production
