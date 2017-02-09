@@ -30,6 +30,7 @@ Create a container, install project, run tests, destroy container
 parse_cli() {
     parse_cli_common "${@}"
 }
+parse_cli "$@"
 
 ### Vuild
 $TEST_LXC_BUILD_SCRIPT
