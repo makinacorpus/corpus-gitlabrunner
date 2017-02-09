@@ -163,7 +163,7 @@ A good value could be:
 But any preexisting and stopped container present on your CI LXC node can be used as a template.
 
 ### Configuring your test suite
-Place a ``$project_dir/ansible/playbooks/test.yml`` ansible playbook file which looks like
+Place a ``$project_dir/ansible/playbooks/tests/test.yml`` ansible playbook file which looks like
 [this one](./ansible/playbooks/lxc/lifecycle/standalone_test.yml)
 
 ### Skipping steps
