@@ -32,6 +32,8 @@ test:
   script:
     - sudo -E /srv/projects/gitlabrunner/project/bin/print_env.sh
     - sudo -E /srv/projects/gitlabrunner/project/bin/lxc_run.sh
+  after_script:
+    - sudo -E /srv/projects/gitlabrunner/project/bin/lxc_cleanup.sh
   except:
     - staging
     - production
