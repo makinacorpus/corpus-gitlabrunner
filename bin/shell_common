@@ -37,7 +37,7 @@ TEST_PILLAR_FILENAME=${TEST_PILLAR_FILENAME:-PILLAR.test}
 TEST_COMMIT=${TEST_COMMIT:-HEAD}
 
 get_all_variables() {
-    set | awk -F '=' '! /^[0-9A-Z_a-z]+=/ {exit} {print $1}'
+    set | awk -F '=' '! /^[0-9A-Z_a-z]+=/ {exit} {print $1}' | sort -u
 }
 
 get_ansible_hosts() {
@@ -484,6 +484,13 @@ first_found_file() {
         if [ -e "$candidate" ];then break;fi
     done
     echo ${candidate}
+}
+
+print_env_vars() {
+    for i in $( get_all_variables \
+        | egrep "${TEST_FORWARDED_SHELL_VARS}");do
+        eval "echo ${i}=\"\${${i}}\""
+    done
 }
 
 re_export_vars() {
