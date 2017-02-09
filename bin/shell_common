@@ -184,6 +184,18 @@ cleanup_docker_tag() {
         | awk '{print tolower($0)}'
 }
 
+silent_run() {
+    local tmpf=$(mktemp)
+    if [[ -n ${DEBUG} ]] || [[ -n ${SILENT_DEBUG} ]];then
+        log "Logging command output to ${tmpf}"
+    fi
+    "${@}" >"${tmpf}" 2>&1
+    local ret=${?}
+    if [ "x${ret}" != "x0" ]; then cat "${tmpf}";fi
+    if [ -e "${tmpf}" ];then rm -f "${tmpf}";fi
+    return "${ret}"
+}
+
 parse_cli_common() {
     USAGE=
     for i in ${@-};do

@@ -21,7 +21,7 @@ parse_cli "$@"
 
 if [[ -z $NO_CLEANUP ]];then
     ansible_play_vars="${TEST_ANSIBLE_VARS}" \
-        vv ansible_play $TEST_LXC_CLEANUP_PLAYBOOKS
+        vv silent_run ansible_play $TEST_LXC_CLEANUP_PLAYBOOKS
 else
     warn "Skip cleanup step"
 fi

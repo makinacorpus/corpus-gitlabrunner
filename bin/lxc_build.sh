@@ -34,21 +34,21 @@ fi
 
 if [[ -z $NO_CREATE ]];then
     ansible_play_vars="${TEST_ANSIBLE_VARS}" \
-        vv ansible_play $TEST_LXC_CREATE_PLAYBOOKS
+        vv silent_run ansible_play $TEST_LXC_CREATE_PLAYBOOKS
     die_in_error "ansible playbook -create- failed"
 else
     warn "Skip create step"
 fi
 if [[ -z $NO_SYNC ]];then
     ansible_play_vars="${TEST_ANSIBLE_VARS}" \
-        vv ansible_play $TEST_LXC_SYNC_CODE_PLAYBOOKS
+        vv silent_run ansible_play $TEST_LXC_SYNC_CODE_PLAYBOOKS
     die_in_error "ansible playbook -sync- failed"
 else
     warn "Skip sync code step"
 fi
 if [[ -z $NO_SETUP ]];then
     ansible_play_vars="${TEST_ANSIBLE_VARS}" \
-        vv ansible_play $TEST_LXC_SETUP_PLAYBOOKS
+        vv silent_run ansible_play $TEST_LXC_SETUP_PLAYBOOKS
     die_in_error "ansible playbook -setup- failed"
 else
     warn "Skip setup step"
