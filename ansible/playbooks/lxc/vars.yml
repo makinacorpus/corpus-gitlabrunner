@@ -17,6 +17,7 @@
           {% set _ = map_vars.update({
             'lxc_container_name': TEST_LXC_NAME,
             'corpusops_lxc_backing_store': TEST_LXC_BACKING_STORE|default('overlayfs'),
+            'corpusops_lxc_auto_start': TEST_LXC_AUTO_START|default('0'),
             'corpusops_lxc_from_container': TEST_LXC_TEMPLATE|default('give_a_lxc_template_pls'),
             'corpusops_lxc_path': TEST_LXC_PATH|default('/var/lib/lxc'),
           }) %}

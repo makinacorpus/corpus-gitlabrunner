@@ -1,11 +1,21 @@
 variables:
-  TEST_LXC_TEMPLATE: gitlabrunner-drupal
+  # use this to build from scratch
+  TEST_LXC_TEMPLATE: "gitlabrunner-python"
+  # use that if you prebacked an image for this project
+  #TEST_LXC_TEMPLATE: "gitlabrunner-$CI_PROJECT_NAMESPACE-$CI_PROJECT_NAME"
   GIT_STRATEGY: fetch
   GIT_SUBMODULE_STRATEGY: recursive
   TEST_ORIGIN_PATH: "$CI_PROJECT_DIR"
-  TEST_PROJECT_PATH: "/srv/projects/$CI_PROJECT_NAME/project"
+  TEST_PROJECT_PATH: "/srv/projects/project/project"
+  #TEST_PROJECT_PATH: "/srv/projects/$CI_PROJECT_NAME/project"
   COMMIT: "$CI_BUILD_REF"
   TEST_LXC_NAME: "grunner-$CI_PROJECT_ID-$CI_PIPELINE_ID-$CI_BUILD_ID"
+  # when you want to prepare a prebacked image, you can activate the following
+  # think to disable already defined properties
+  #TEST_LXC_TEMPLATE: "gitlabrunner-python"
+  #TEST_LXC_NAME: "lxcgitlabrunner-$CI_PROJECT_NAMESPACE-$CI_PROJECT_NAME"
+  #NO_CLEANUP: "1"
+  #TEST_LXC_BACKING_STORE: "dir"
 
 stages:
   - test
@@ -18,8 +28,7 @@ test:
     TEST_USE_MAKINASTATES: "true"
   tags:
     - makina-states
-    - lxc_drupal
-    - myhostname.makina-corpus.net
+    - lxc_python
   script:
     - sudo -E /srv/projects/gitlabrunner/project/bin/print_env.sh
     - sudo -E /srv/projects/gitlabrunner/project/bin/lxc_run.sh
@@ -32,9 +41,13 @@ staging:
   environment:
      name: staging
      url: "https://staging.example.com"
-  tags: []
+  tags:
+    - makina-states
+    - lxc_python
+    - myproject_staging
   script:
     - echo "no staging procedure defined"
+  when: manual
   only:
     - staging
 
@@ -43,7 +56,10 @@ prod:
   environment:
      name: production
      url: "https://example.com"
-  tags: []
+  tags:
+    - makina-states
+    - lxc_python
+    - myproject_production
   script:
     - echo "no prod procedure defined"
   when: manual

@@ -200,6 +200,12 @@ Playbooks environment variables (space separated list of playbooks (filename)):
     -  ``$project/ansible/playbooks/tests``
     -  ``$thisrepo/<default_location>``
 
+### .gitlab-ci.yml Examples
+- [dummy](./examples/dummy-.gitlab-ci.yml)
+- [django](https://github.com/makinacorpus/corpus-django/blob/master/.gitlab-ci.yml)
+- [zope](https://github.com/makinacorpus/corpus-zope-plone/blob/master/.gitlab-ci.yml)
+- [drupal](https://github.com/makinacorpus/corpus-drupal/blob/master/.gitlab-ci.yml)
+
 ### ENVIRON
 Main variables that you can override in your ``.gitlab-ci.yml`` environment section to parameterize the build
 
