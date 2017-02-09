@@ -238,4 +238,5 @@ If you need to use gitlab variables, name them like ``CUSTOM_XXX``. If this real
 | TEST_LXC_SETUP_PLAYBOOKS     | space separated abspaths to playbooks to run at setup  step     | <fist_found>/setup.yml    |
 | TEST_LXC_TEST_PLAYBOOKS      | space separated abspaths to playbooks to run at test step       | <fist_found>/test.yml     |
 | TEST_LXC_CLEANUP_PLAYBOOKS   | space separated abspaths to playbooks to run at cleanup step    | <fist_found>/cleanup.yml  |
+| TEST_SALTCALL_LOGLEVEL   | salt-call loglevel | info  |
 

@@ -8,7 +8,8 @@
     - name: init project skeleton
       shell: |
         if [ ! -d "{{TEST_PROJECT_PATH}}/.git" ];then
-          salt-call --retcode-passthrough mc_project.init_project {{ms_project_name}}
+          salt-call -l {{TEST_SALTCALL_LOGLEVEL}} --retcode-passthrough \
+            mc_project.init_project {{ms_project_name}}
         fi
       when: "{{TEST_USE_MAKINASTATES}}"
       tags: project_sync
@@ -43,7 +44,7 @@
       when: "{{TEST_USE_MAKINASTATES}}"
     - name: fix perms
       shell: |
-        salt-call --retcode-passthrough \
+        salt-call -l {{TEST_SALTCALL_LOGLEVEL}} --retcode-passthrough \
           mc_project.deploy {{ms_project_name}} only=fixperms
       tags: project_sync
       when: "{{TEST_USE_MAKINASTATES}}"
@@ -56,7 +57,7 @@
       when: "{{TEST_USE_MAKINASTATES}}"
     - name: fix perms - post
       shell: |
-        salt-call --retcode-passthrough \
+        salt-call -l {{TEST_SALTCALL_LOGLEVEL}} --retcode-passthrough \
           mc_project.deploy {{ms_project_name}} only=fixperms
       tags: project_sync
       when: "{{TEST_USE_MAKINASTATES}}"

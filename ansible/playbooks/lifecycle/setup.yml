@@ -6,7 +6,7 @@
   tasks:
     - name: build project
       shell: |
-        salt-call -lall --retcode-passthrough \
+        salt-call -l {{TEST_SALTCALL_LOGLEVEL}} --retcode-passthrough \
           mc_project.deploy {{ms_project_name}} only=install,fixperms
       when: "{{TEST_USE_MAKINASTATES}}"
       tags: project_setup,project_setup_ms

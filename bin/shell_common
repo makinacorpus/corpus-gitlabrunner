@@ -35,6 +35,7 @@ TEST_PROJECT_PATH=${TEST_PROJECT_PATH:-/srv/projects/project/project}
 TEST_USE_MAKINASTATES=${TEST_USE_MAKINASTATES:-true}
 TEST_PILLAR_FILENAME=${TEST_PILLAR_FILENAME:-PILLAR.test}
 TEST_COMMIT=${TEST_COMMIT:-HEAD}
+TEST_SALTCALL_LOGLEVEL=${TEST_SALTCALL_LOGLEVEL:-info}
 
 get_all_variables() {
     set | awk -F '=' '! /^[0-9A-Z_a-z]+=/ {exit} {print $1}' | sort -u
