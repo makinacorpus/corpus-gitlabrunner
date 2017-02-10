@@ -178,7 +178,11 @@ silent_run() {
     if test_silent_log;then
         log "Logging command output to ${tmpf}"
     fi
-    "${@}" >"${tmpf}" 2>&1
+    if [[ -n "${NO_SILENT-}" ]];then
+        "${@}"
+    else
+        "${@}" >"${tmpf}" 2>&1
+    fi
     local ret=${?}
     if [ "x${ret}" != "x0" ]; then cat "${tmpf}";fi
     if [ -e "${tmpf}" ];then rm -f "${tmpf}";fi
