@@ -174,12 +174,7 @@ test_silent() {
 }
 
 silent_run_post() {
-    if [ "x${rc}" != "x0" ] && [ -e "${tmpf}" ]; then
-        cat "${tmpf}"
-    fi
-    if [ -e "${tmpf}" ];then
-        rm -f "${tmpf}"
-    fi
+    if [ -e "${tmpf}" ];then rm -f "${tmpf}";fi
 }
 
 silent_run_() {
@@ -193,6 +188,11 @@ silent_run_() {
     else
         "${@}" >"${tmpf}" 2>&1
     fi
+    local ret=${?}
+    if [ "x${rc}" != "x0" ] && [ -e "${tmpf}" ]; then
+        cat "${tmpf}"
+    fi
+    return ${ret}
 }
 
 silent_run() {
