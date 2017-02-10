@@ -173,8 +173,18 @@ test_silent() {
     ( [[ -n ${SILENT-} ]] || test_silent_log )
 }
 
-silent_run() {
-    local tmpf=$(mktemp)
+silent_run_post() {
+    if [ "x${rc}" != "x0" ] && [ -e "${tmpf}" ]; then
+        cat "${tmpf}"
+    fi
+    if [ -e "${tmpf}" ];then
+        rm -f "${tmpf}"
+    fi
+}
+
+silent_run_() {
+    tmpf=$(mktemp)
+    do_trap silent_run_post EXIT TERM QUIT
     if test_silent_log;then
         log "Logging command output to ${tmpf}"
     fi
@@ -183,10 +193,10 @@ silent_run() {
     else
         "${@}" >"${tmpf}" 2>&1
     fi
-    local ret=${?}
-    if [ "x${ret}" != "x0" ]; then cat "${tmpf}";fi
-    if [ -e "${tmpf}" ];then rm -f "${tmpf}";fi
-    return "${ret}"
+}
+
+silent_run() {
+    ( silent_run_ "${@}" ; )
 }
 
 vvv() {
