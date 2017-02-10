@@ -1,6 +1,9 @@
 {% set cfg = opts.ms_project %}
 {% set data = cfg.data %}
 
+include:
+  - makina-states.services.base.ssh.client
+
 {% if cfg.data.runner_config.runners %}
 {{cfg.name}}-gci-repo:
   cmd.run:
