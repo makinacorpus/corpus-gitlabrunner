@@ -32,13 +32,12 @@ parse_cli() {
 }
 parse_cli "$@"
 
-### Vuild
+### Build
 $TEST_LXC_BUILD_SCRIPT
 ret=$?
 
 ### Tests
 if [ "x${ret}" = "x0" ]; then
-    echo here
     $TEST_LXC_TEST_SCRIPT
     ret=$?
 else
