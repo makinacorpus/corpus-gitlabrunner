@@ -5,6 +5,7 @@
   vars: {inc_node: "{{test_node}}"}
 - hosts: "{{test_node}}"
   tasks:
+    - include: "../utils.yml"
     - name: init project skeleton
       shell: |
         if [ ! -d "{{TEST_PROJECT_PATH}}/.git" ];then
@@ -41,7 +42,6 @@
         cd {{TEST_PROJECT_PATH}}
         git reset --hard {{TEST_COMMIT}}
       tags: project_sync
-      when: "{{TEST_USE_MAKINASTATES}}"
     - name: fix perms
       shell: |
         salt-call -l {{TEST_SALTCALL_LOGLEVEL}} --retcode-passthrough \

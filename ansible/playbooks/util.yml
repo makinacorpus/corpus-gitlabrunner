@@ -1,0 +1,11 @@
+---
+- name: "test if {{util}}"
+  stat: {path: "{{vars.get(util+'_path', '/usr/bin/'+util)}}"}
+  register: install_util_test
+  failed_when: false
+- name: "ensure {{util}} is installed"
+  package:
+    update_cache: yes
+    name: "{{util}}"
+    state: installed
+  when: "{{not install_util_test.stat.exists}}"
