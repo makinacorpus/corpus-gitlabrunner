@@ -549,4 +549,13 @@ re_export_vars() {
 
 detect_os no_fail
 re_export_vars
+
+if echo "${0}" | egrep -q 'shell_common$';then
+    if declare -f "$1" >/dev/null 2>&1; then
+        "${@}"
+    else
+        echo Could not find function for $@
+        exit 1
+    fi
+fi
 # vim:set et sts=4 ts=4 tw=0:

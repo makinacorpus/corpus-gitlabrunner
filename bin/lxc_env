@@ -45,4 +45,12 @@ DEFAULT_TEST_LXC_TEST_PLAYBOOKS="$(first_found_file test.yml \
 TEST_LXC_TEST_PLAYBOOKS=${TEST_LXC_TEST_PLAYBOOKS-${DEFAULT_TEST_LXC_TEST_PLAYBOOKS}}
 
 re_export_vars
+if echo "${0}" | egrep -q 'lxc_env$';then
+    if declare -f "$1" >/dev/null 2>&1; then
+        "${@}"
+    else
+        echo Could not find function for $@
+        exit 1
+    fi
+fi
 # vim:set et sts=4 ts=4 tw=0:
