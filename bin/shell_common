@@ -184,7 +184,7 @@ silent_run_post() {
 
 silent_run_() {
     tmpf=$(mktemp)
-    do_trap silent_run_post EXIT TERM QUIT
+    do_trap silent_run_post EXIT TERM QUIT INT
     if test_silent_log;then
         log "Logging command output to ${tmpf}"
     fi
