@@ -180,12 +180,12 @@ silent_run_post() {
 silent_run_() {
     tmpf=$(mktemp)
     do_trap silent_run_post EXIT TERM QUIT INT
-    if test_silent_log;then
-        log "Logging command output to ${tmpf}"
-    fi
     if [[ -n "${NO_SILENT-}" ]];then
         "${@}"
     else
+        if test_silent_log;then
+            log "Logging command output to ${tmpf}"
+        fi
         "${@}" >"${tmpf}" 2>&1
     fi
     local ret=${?}
