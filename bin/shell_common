@@ -189,7 +189,7 @@ silent_run_() {
         "${@}" >"${tmpf}" 2>&1
     fi
     local ret=${?}
-    if [ "x${rc}" != "x0" ] && [ -e "${tmpf}" ]; then
+    if [ "x${ret}" != "x0" ] && [ -e "${tmpf}" ]; then
         cat "${tmpf}"
     fi
     return ${ret}
