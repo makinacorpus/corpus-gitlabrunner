@@ -222,7 +222,7 @@ If you need to use gitlab variables, name them like ``CUSTOM_XXX``. If this real
 | GRUNNER_TOP_DIR        | root path of this repo     | /srv/projects/gitlabrunner/project |
 | **TEST_LXC_TEMPLATE**        | container to take as ancestor     |  gitlabrunner-common                        |
 | TEST_USE_MAKINASTATES        | is the project makinastates based |  true                                       |
-| TEST_COMMIT        | deployed commit |  HEAD                                       |
+| TEST_COMMIT        | commit that will be tested |  HEAD                                       |
 | TEST_LXC_NAME                | name of the container to create   |  gci-$(get_random_slug 8)                   |
 | TEST_LXC_BUILD_SCRIPT        | script to exec at build step      |  [bin/lxc_build.sh](bin/lxc_build.sh)       |
 | TEST_LXC_TEST_SCRIPT         | script to exec at test step       |  [bin/lxc_test.sh](bin/lxc_test.sh)         |
