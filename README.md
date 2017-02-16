@@ -17,6 +17,8 @@ Idea is to execute tests on volatile containers spinned on remote lxc-capable co
 - As soon as we spin a lxc container we can control it via SSH
   - We use here [lxc_create](https://github.com/corpusops/lxc_create)
   - & [lxc_sshauth](https://github.com/corpusops/lxc_sshauth)
+- In many playbooks, we will call [lxc_register](https://github.com/corpusops/lxc_register) to
+  dynamically load the LXC container inside the current ansible inventory.
 - We can then spin lxc containers and run our test suite on. All this work is done and configurable
   via well placed ansible playbooks and shell scripts that call them
   - Read (recursivly [this run script](./bin/lxc_run.sh).
@@ -203,8 +205,8 @@ Playbooks environment variables (space separated list of playbooks (filename)):
 ### .gitlab-ci.yml Examples
 - [dummy](./examples/dummy-.gitlab-ci.yml)
 - [django](https://github.com/makinacorpus/corpus-django/blob/master/.gitlab-ci.yml)
-- [zope](https://github.com/makinacorpus/corpus-zope-plone/blob/master/.gitlab-ci.yml)
-- [drupal](https://github.com/makinacorpus/corpus-drupal/blob/master/.gitlab-ci.yml)
+- (TODO) [zope](https://github.com/makinacorpus/corpus-zope-plone/blob/master/.gitlab-ci.yml)
+- (TODO) [drupal](https://github.com/makinacorpus/corpus-drupal/blob/master/.gitlab-ci.yml)
 
 ### ENVIRON
 Main variables that you can override in your ``.gitlab-ci.yml`` environment section to parameterize the build
@@ -239,10 +241,10 @@ If you need to use gitlab variables, name them like ``CUSTOM_XXX``. If this real
 | NO_SETUP                     | Skip the setup code step | not defined |
 | NO_TEST                      | Skip the tests step            | not defined |
 | NO_CLEANUP                   | Skip the cleanup step          | not defined |
-| TEST_LXC_CREATE_PLAYBOOKS    | space separated abspaths to playbooks to run at create step     | <fist_found>/create.yml   |
-| TEST_LXC_SYNC_CODE_PLAYBOOKS | space separated abspaths to playbooks to run at sync. code step | <fist_found>/sync_code.yml|
-| TEST_LXC_SETUP_PLAYBOOKS     | space separated abspaths to playbooks to run at setup  step     | <fist_found>/setup.yml    |
-| TEST_LXC_TEST_PLAYBOOKS      | space separated abspaths to playbooks to run at test step       | <fist_found>/test.yml     |
-| TEST_LXC_CLEANUP_PLAYBOOKS   | space separated abspaths to playbooks to run at cleanup step    | <fist_found>/cleanup.yml  |
+| TEST_LXC_CREATE_PLAYBOOKS    | space separated abspaths to playbooks to run at create step     | <fist_found>/[create.yml](https://github.com/makinacorpus/corpus-gitlabrunner/blob/master/ansible/playbooks/lxc/create.yml) |
+| TEST_LXC_SYNC_CODE_PLAYBOOKS | space separated abspaths to playbooks to run at sync. code step | <fist_found>/[sync_code.yml](https://github.com/makinacorpus/corpus-gitlabrunner/blob/master/ansible/playbooks/lxc/lifecycle/sync_code.yml) [sub](https://github.com/makinacorpus/corpus-gitlabrunner/blob/master/ansible/playbooks/lifecycle/sync_code.yml) |
+| TEST_LXC_SETUP_PLAYBOOKS     | space separated abspaths to playbooks to run at setup  step     | <fist_found>/[setup.yml](https://github.com/makinacorpus/corpus-gitlabrunner/blob/master/ansible/playbooks/lxc/lifecycle/setup.yml() [sub](https://github.com/makinacorpus/corpus-gitlabrunner/blob/master/ansible/playbooks/lifecycle/setup.yml)       |
+| TEST_LXC_TEST_PLAYBOOKS      | space separated abspaths to playbooks to run at test step       | <fist_found>/[test.yml](https://github.com/makinacorpus/corpus-gitlabrunner/blob/master/ansible/playbooks/lxc/lifecycle/test.yml) [sub][https://github.com/makinacorpus/corpus-gitlabrunner/blob/master/ansible/playbooks/lifecycle/test.yml]        |
+| TEST_LXC_CLEANUP_PLAYBOOKS   | space separated abspaths to playbooks to run at cleanup step    | <fist_found>/[cleanup.yml](https://github.com/makinacorpus/corpus-gitlabrunner/blob/master/ansible/playbooks/lxc/cleanup.yml)     |
 | TEST_SALTCALL_LOGLEVEL   | salt-call loglevel | info  |
 
