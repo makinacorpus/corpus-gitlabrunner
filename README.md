@@ -234,7 +234,7 @@ If you need to use gitlab variables, name them like ``CUSTOM_XXX``. If this real
 | TEST_ORIGIN_PATH             | sources to push inside the test env            | gitlab ci checkout root        |
 | TEST_PROJECT_PATH            | where to push sources inside test env          | /srv/projects/project/project} |
 | TEST_PILLAR_FILENAME         | project pillar to load from .salt folder       | PILLAR.test |
-| TEST_FORWARDED_SHELL_VARS    | regex for variables to export through the build procedure | <code>^(W\|GRUNNER_TOP_DIR\|(CUSTOM\|GITLAB\|ARTIFACT\<br/>|RESTORE\|GET\|TEST\|NO\|CI)_.*)$</code> |
+| TEST_FORWARDED_SHELL_VARS    | regex for variables to export through the build procedure | <code>^(W\|GRUNNER_TOP_DIR\|(CUSTOM\|GITLAB\|ARTIFACT<br/>\|RESTORE\|GET\|TEST\|NO\|CI)_.*)$</code> |
 | NO_BUILD                     | Skip the build step            | not defined |
 | NO_CREATE                    | Skip the create step           | not defined |
 | NO_SYNC                      | Skip the synchronise code step | not defined |
