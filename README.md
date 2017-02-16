@@ -192,11 +192,11 @@ Top level scripts paths can be overriden by changing their path via their releva
 
 
 Playbooks environment variables (space separated list of playbooks (filename)):
-- ``TEST_LXC_CREATE_PLAYBOOKS``: playbooks to run at create step (**<first_found>/create.yml**)
-- ``TEST_LXC_SYNC_CODE_PLAYBOOKS ``: playbooks to run at sync. code step (**<first_found>/sync_code**)
-- ``TEST_LXC_SETUP_PLAYBOOKS``: playbooks to run at setup  step (**<first_found>/setup.yml**)
-- ``TEST_LXC_TEST_PLAYBOOKS``: playbooks to run at test step (**<first_found>/test.yml**)
-- ``TEST_LXC_CLEANUP_PLAYBOOKS``:  playbooks to run at cleanup step (**<first_found>/cleanup.yml**)
+- ``TEST_LXC_CREATE_PLAYBOOKS``: playbooks to run at create step (**create.yml**)
+- ``TEST_LXC_SYNC_CODE_PLAYBOOKS ``: playbooks to run at sync. code step (**sync_code**)
+- ``TEST_LXC_SETUP_PLAYBOOKS``: playbooks to run at setup  step (**setup.yml**)
+- ``TEST_LXC_TEST_PLAYBOOKS``: playbooks to run at test step (**test.yml**)
+- ``TEST_LXC_CLEANUP_PLAYBOOKS``:  playbooks to run at cleanup step (**cleanup.yml**)
 - If not overriden, each playbook will be seeked in this order:
     -  ``$project/.ansible/playbooks/tests``
     -  ``$project/ansible/playbooks/tests``
