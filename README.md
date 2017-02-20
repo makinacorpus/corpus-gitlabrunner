@@ -214,7 +214,7 @@ Main variables that you can override in your ``.gitlab-ci.yml`` environment sect
 All those variables are exported with same name to ansible
 Additionnaly, you also have access to the [gitlab exported variables](https://docs.gitlab.com/ce/ci/variables/).
 
-To be clear any variable under the {RESTORE|ARTIFACT,GET,CI,GITLAB,CUSTOM}_ prefixes are exported.
+To be clear any variable under the RESTORE_, ARTIFACT_, GET_, CI_, GITLAB_, CUSTOM_, TEST_ prefixes are exported.
 If you need to use gitlab variables, name them like ``CUSTOM_XXX``. If this really isnt convenient, redefine the ``TEST_FORWARDED_SHELL_VARS`` environ variable to something more appropriate.
 
 | NAME                         | DESC                              |  DEFAULT or Example        |
