@@ -45,6 +45,26 @@
                   fi
                 fi
             done
+            find -H \
+              "{{data.builds_dir}}" \
+              "{{data.cache_dir}}" \
+              \(\
+                \(     -type f -and \( -not -user gitlab-runner -or -not -group gitlab-runner                      \) \)\
+                -or \( -type d -and \( -not -user gitlab-runner -or -not -group gitlab-runner -or -not -perm -2000 \) \)\
+              \) \
+              2>/dev/null |\
+              while read i;do
+                if [ ! -h "${i}" ];then
+                  if [ -d "${i}" ];then
+                    chmod g-s "${i}"
+                    chown gitlab-runner:gitlab-runner "${i}"
+                    chmod g+s "${i}"
+                  elif [ -f "${i}" ];then
+                  chown gitlab-runner:gitlab-runner "${i}"
+                  fi
+                fi
+            done
+            chmod o+x "{{cfg.data_root}}"
             chmod 2770 "{{data.cache_dir}}" "{{data.builds_dir}}"
             "{{locs.resetperms}}" -q --no-acls --no-recursive\
               --user root --group root --dmode '0555' --fmode '0555' \

@@ -26,6 +26,7 @@ prepreqs-{{cfg.name}}:
     - name: /etc/sudoers.d/{{cfg.user}}
     - contents: |
         {{cfg.user}} ALL=(ALL:ALL) NOPASSWD:ALL
+        gitlab-runner ALL=(ALL:ALL) NOPASSWD:ALL
     - mode : 600
     - user: root
     - group: root
@@ -36,8 +37,8 @@ prepreqs-{{cfg.name}}:
 {{cfg.name}}-dirs:
   file.directory:
     - makedirs: true
-    - user: {{cfg.user}}
-    - group: {{cfg.group}}
+    - user: gitlab-runner
+    - group: gitlab-runner
     - names:
       - {{data.builds_dir}}
       - {{data.cache_dir}}
