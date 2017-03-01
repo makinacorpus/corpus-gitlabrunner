@@ -1,0 +1,3 @@
+{{vars.get('makinastates_pillar', '').replace(
+'__MS_PROJECT_NAME__', ms_project_name)
+}}

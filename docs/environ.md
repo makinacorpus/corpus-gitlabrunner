@@ -18,6 +18,7 @@ If you need to use gitlab variables, name them like ``CUSTOM_XXX``. If this real
 | TEST_ORIGIN_PATH             | sources to push inside the test env            | gitlab ci checkout root        |
 | TEST_PROJECT_PATH            | where to push sources inside test env          | /srv/projects/project/project} |
 | TEST_FORWARDED_SHELL_VARS    | regex for variables to export through the build procedure | ^(W\|GRUNNER_TOP_DIR\|(CUSTOM\|GITLAB\|ARTIFACT<br/>\|RESTORE\|GET\|TEST\|NO\|CI)_.*)$ |
+| TEST_ENVIRONMENT_NAME| environment name where we are deploying, determine the vault filename to grab | $CI_ENVIRONMENT_NAME or default if undefined |
 
 ## CI Specific
 | NAME                         | DESC                              |  DEFAULT or Example        |
@@ -52,5 +53,4 @@ If you need to use gitlab variables, name them like ``CUSTOM_XXX``. If this real
 | NO_DEPLOY_EXTRAS         | Skip the extra playbooks run step | not defined |
 | TEST_SYNC_CODE_PLAYBOOKS | space separated abspaths to playbooks to run at sync. code step in deployed env| [sync_code.yml](../ansible/playbooks/lifecycle/sync_code.yml) |
 | TEST_ENV_SETUP_PLAYBOOKS | space separated abspaths to playbooks to run at setup  step     | [env_setup.yml](../ansible/playbooks/lifecycle/env_setup.yml)       |
-| TEST_DEPLOY_ENVIRONMENT | environment name where we are deploying, determine the vault filename to grab | $CI_ENVIRONMENT_NAME or default if undefined |
-
+| TEST_ANSIBLE_VAULTS | vault location candidates | (.)ansible/vaults/${TEST_ENVIRONMENT_NAME}.yml, (.)ansible/vaults/${TEST_ENVIRONMENT_NAME}.yml, (.)ansible/vaults/default.yml |

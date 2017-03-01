@@ -36,6 +36,17 @@ TEST_USE_MAKINASTATES=${TEST_USE_MAKINASTATES-true}
 TEST_PILLAR_FILENAME=${TEST_PILLAR_FILENAME-PILLAR.test}
 TEST_COMMIT=${TEST_COMMIT-HEAD}
 TEST_SALTCALL_LOGLEVEL=${TEST_SALTCALL_LOGLEVEL-info}
+TEST_ENVIRONMENT_NAME=${CI_ENVIRONMENT_NAME:-default}
+TEST_ANSIBLE_VAULTS=${TEST_ANSIBLE_VAULTS:-"
+$W/.ansible/vaults/${TEST_ENVIRONMENT_NAME}.yml
+$W/ansible/vaults/${TEST_ENVIRONMENT_NAME}.yml
+$W/ansible/vaults/default.yml
+$W/.ansible/vaults/default.yml
+"}
+
+PROJECT_PLAYBOOK_FOLDERS="
+$W/ansible/playbooks/
+$W/.ansible/playbooks/"
 
 get_all_variables() {
     set | awk -F '=' '! /^[0-9A-Z_a-z]+=/ {exit} {print $1}' | sort -u
@@ -49,10 +60,21 @@ get_ansible_inv() {
     local ansible_hosts=""
     for h in $(get_ansible_hosts);do
         if echo "$ansible_hosts" | xargs -n1 | egrep -vq "^${h}$";then
-            ansible_hosts="$ansible_hosts $h"
+            if [[ -n ${ansible_hosts} ]];then
+                ansible_hosts="$ansible_hosts $h"
+            else
+                ansible_hosts="$h"
+            fi
         fi
     done
     echo "-i ${ANSIBLE_INVENTORY:-${ansible_hosts},}"
+}
+
+set_ansible_vault() {
+    local ansible_vault="$HOME/.ansiblevaultpassword.${TEST_ENVIRONMENT_NAME}"
+    if [ -e ${ansible_vault} ];then
+        export ANSIBLE_VAULT_PASSWORD_FILE="${ansible_vault}"
+    fi
 }
 
 has_command() {
@@ -484,14 +506,27 @@ version_gt() {
     [ "$1" = "$2" ] && return 1 || verlte $1 $2
 }
 
+get_ansible_connection() {
+    if [ "x$(get_ansible_inv)" = "x-i 127.0.0.1," ] \
+        || [ "x$(get_ansible_inv)" = "x-i localhost," ] \
+        ;then
+        echo "-c local"
+    fi
+}
+
 ansible_playbook_() {
     local ansible_verb=
     if [[ -n ${DEBUG} ]];then
         ansible_verb=-vvvvv
     fi
     ( \
+        set_ansible_vault;
         export PATH=/srv/corpusops/corpusops.bootstrap/bin:$PATH;
-    vvv ansible-playbook $ansible_verb $(get_ansible_inv) "$@"; );
+    vvv ansible-playbook $ansible_verb \
+        $(get_ansible_connection) \
+        $(get_ansible_inv) \
+        "$@" \
+        ; );
 }
 
 ansible_() {
@@ -500,8 +535,13 @@ ansible_() {
         ansible_verb=-vvvvv
     fi
     ( \
+        set_ansible_vault;
         export PATH=/srv/corpusops/corpusops.bootstrap/bin:$PATH;
-    vvv ansible $ansible_verb $(get_ansible_inv) "$@"; );
+    vvv ansible $ansible_verb \
+        $(get_ansible_connection) \
+        $(get_ansible_inv) \
+        "$@" \
+        ; );
 }
 
 ansible_play() {

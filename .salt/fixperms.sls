@@ -46,6 +46,7 @@
                 fi
             done
             find -H \
+              "{{data.runner_dir}}" \
               "{{data.builds_dir}}" \
               "{{data.cache_dir}}" \
               \(\

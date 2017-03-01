@@ -45,8 +45,8 @@ register-runners-{{loop.index}}:
           gitlab-ci-multi-runner install \
             --config=/etc/gitlab-runner/config.toml \
             --service=gitlab-runner \
-            --working-directory="{{data.builds_dir}}" \
-            --user "{{cfg.user}}"
+            --working-directory="{{data.runner_dir}}" \
+            --user "gitlab-runner"
         fi
     - onlyif: |
         if [ ! -e /etc/systemd/system/gitlab-runner.service ];then

@@ -40,6 +40,7 @@ prepreqs-{{cfg.name}}:
     - user: gitlab-runner
     - group: gitlab-runner
     - names:
+      - {{data.runner_dir}}
       - {{data.builds_dir}}
       - {{data.cache_dir}}
 

@@ -19,8 +19,9 @@ makina-projects.projectname:
     register_token: xxx
     fixperms_cron_periodicity: "0 */2 * * *"
     modes: ['lxc']
-    builds_dir: "{data_root}/builds"
-    cache_dir: "{data_root}/cache"
+    runner_dir: "{data_root}/runner"
+    builds_dir: "{runner_dir}/builds"
+    cache_dir: "{runner_dir}/cache"
     runner_config:
       concurrent: "1"
       check_interval: "0"

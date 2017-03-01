@@ -14,10 +14,28 @@
          {% set map_vars = {
            'TEST_USE_MAKINASTATES': ( TEST_USE_MAKINASTATES|default(true) ) | bool,
          } %}
+         {% set vaults = [] %}
+         {% for i in TEST_ANSIBLE_VAULTS.split() %}
+         {% set i = i.strip() %}
+         {% if i %}{% set _ = vaults.append(i) %}{% endif %}
+         {% endfor %}
          {% set _ = map_vars.update({
            'ms_project_name': TEST_PROJECT_PATH | cops_basename(-1),
            'ms_pillar_test': TEST_PROJECT_PATH + '/.salt/'+TEST_PILLAR_FILENAME,
            'ms_pillar': TEST_PROJECT_PATH + '/../pillar/init.sls',
+           'runner_vaults': vaults,
          }) %}
          {{ map_vars | to_json }}
         name: __GLOBAL__
+    - name: record vault
+      debug: {msg: "{{item}}"}
+      register: project_vars_vault_file
+      with_first_found:
+        - files: "{{runner_vaults}}"
+          skip: true
+    - name: "include vault data"
+      include_vars: "{{project_vars_vault_file.results[0].msg}}"
+      when: "{{ (project_vars_vault_file.results|length) > 0}}"
+    #- debug: {msg: "{{ makinastates_pillar|default('') }}"}
+    #- shell: /bin/false
+

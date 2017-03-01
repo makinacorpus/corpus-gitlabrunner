@@ -2,15 +2,15 @@
 # Pushes latests commits inside project container
 # and update working copy to it.
 - include: "{{GRUNNER_TOP_DIR}}/ansible/playbooks/vars.yml"
-  vars: {inc_node: "{{test_node}}"}
-- hosts: "{{test_node}}"
+  vars: {inc_node: "{{test_node | default('all')}}"}
+- hosts: "{{test_node|default('all')}}"
   tasks:
     - include: "../utils.yml"
     - name: init project skeleton
       shell: |
         if [ ! -d "{{TEST_PROJECT_PATH}}/.git" ];then
           salt-call -l {{TEST_SALTCALL_LOGLEVEL}} --retcode-passthrough \
-            mc_project.init_project {{ms_project_name}}
+            mc_project.init_project {{ms_project_name}} remote_less=True
         fi
       when: "{{TEST_USE_MAKINASTATES}}"
       tags: project_sync
@@ -37,6 +37,13 @@
           - '--exclude=config'
       delegate_to: "{{TEST_ORIGIN}}"
       tags: project_sync
+    - name: Stash any changes
+      shell: |
+        cd {{TEST_PROJECT_PATH}}
+        set -e
+        vv() { echo "${@}" >&2;"${@}"; }
+        if ! git diff --quiet; then vv git stash;fi
+      tags: project_sync
     - name: Put project at wanted commit
       shell: |
         cd {{TEST_PROJECT_PATH}}
@@ -61,3 +68,4 @@
           mc_project.deploy {{ms_project_name}} only=fixperms
       tags: project_sync
       when: "{{TEST_USE_MAKINASTATES}}"
+    #- shell: /bin/false

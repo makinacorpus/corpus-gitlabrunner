@@ -2,8 +2,8 @@
 # Run project test, this is this playbook you want to override in your
 # project
 - include: "{{GRUNNER_TOP_DIR}}/ansible/playbooks/vars.yml"
-  vars: {inc_node: "{{test_node}}"}
-- hosts: "{{test_node}}"
+  vars: {inc_node: "{{test_node|default('all')}}"}
+- hosts: "{{test_node|default('all')}}"
   tasks:
     - name: test if we have pillar file
       stat: {path: "{{ms_pillar}}"}

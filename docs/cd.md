@@ -85,19 +85,20 @@ ansible-vault edit .ansible/vaults/staging.yml
 Remember that the editor used by ansible vault is controlled via the ``$EDITOR`` environment variable.
 
 - Dont forget to add, commit and push this vault file
+- Remember tthat the ``TEST_ANSIBLE_VAULTS`` environmnent variable controls the vault location candidates search path (``(.)ansible/vaults/${TEST_ENVIRONMENT_NAME}.yml``, ``(.)ansible/vaults/${TEST_ENVIRONMENT_NAME}.yml``, ``(.)ansible/vaults/default.yml`` by default)
 
 ### Setup the CD node access to the environment related ansible vault file
-For the Vault to be decoded, you will need to add the password
-somewhere on the CD node.
+For the Vault to be decoded, you will need to add the password somewhere on the CD node.
 
 For this you need to:
 - Login on the node
-- write as the gitlabrunner process owner user inside ``~/.ansiblevaultpassword.$TEST_DEPLOY_ENVIRONMENT`` the clear password to access to the vault
+- write as the gitlabrunner process owner user inside ``~/.ansiblevaultpassword.$TEST_ENVIRONMENT_NAME`` the clear password to access to the vault
 
 EG:
 ```sh
 ssh mystaging
-su gitlab-runner
+sudo su
+# or su
 echo "SuperSecret" > ~/.ansiblevaultpassword.staging
 chmod 600 ~/.ansiblevaultpassword.staging
 ```
