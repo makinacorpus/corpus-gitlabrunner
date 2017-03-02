@@ -1,0 +1,29 @@
+---
+- {hosts: "{{ci_runners|default('all')}}", roles: [{role: corpusops.vars}]}
+- hosts: "{{ci_runners|default('all')}}"
+  tasks:
+    - debug: msg=OK
+      failed_when: "{{ not(gitlab and token)}}"
+    - shell: |
+        set -ex
+        if [ ! -e /srv/projects/gitlabrunner/project ];then
+          {% set want_salt = True %}
+          chown root:root /srv/projects && chmod 751 /srv/projects
+          {% if want_salt %}
+          if [ ! -e /srv/makina-states ];then
+            git clone https://github.com/makinacorpus/makina-states.git /srv/makina-states
+            /srv/makina-states/bin/boot-salt2.sh -C --install-links
+          else
+            cd /srv/makina-states
+            git pull
+          fi
+          {% endif %}
+          salt-call mc_project.init_project gitlabrunner remote_less=True
+        fi
+    - shell: |
+        set -ex
+        cd /srv/projects/gitlabrunner/project
+        git remote rm g || /bin/true
+        git remote add g https://github.com/makinacorpus/corpus-gitlabrunner
+        git fetch --all
+        git reset --hard g/master

@@ -1,3 +1,4 @@
+#jinja2:  variable_start_string: "[%" , variable_end_string: "%]", block_start_string: "<%" , block_end_string: "%>"
 # think that dicts are updated/merged with default
 # but lists are overidden
 {% set dom = grains['fqdn'].split('.')[1:] %}
@@ -8,14 +9,16 @@
 makina-projects.gitlabrunner:
   api_version: '2'
   data:
-    register_token: "XXX"
+    register_token: "[% token %]"
     runner_config:
       runners:
         {{grains['fqdn']}}:
-          url: "https://gitlab.{{domain}}"
+          url: "[% gitlab %]"
           tags_list:
             - makina-states
+            <% if vars.get('ci_lxc', True) %>
             - lxc_python
             - lxc_drupal
+            <% endif %>
             - "{{grains['fqdn']}}"
-# vim:set ft=sls:
+# vim:set ft=sls: 
