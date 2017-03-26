@@ -52,7 +52,7 @@ pip install --upgrade ansible
 ```
 
 ### Create/Edit a vault for an environment
-- The vault password for the ``default`` vault must be ``default``.
+- The vault password can be mentioned via ``TEST_ANSIBLE_VAULT_PASSWORD``.
 - A vault can be unencrypted, it's just an ansible variable file, afterall, and the ``default.yml`` is
   a good candidate not to be encrypted.
 
@@ -61,7 +61,6 @@ Environment vaults must be checked either in:
 - ``ansible/vaults/staging.yml``
 
 For makinastates based deployments:
-- If no password file is present on environment: the password is equiv to the environemnt name (useful on test: create a vault with 'test' as password)
 - The pillar awaiten variable name is ``makinastates_pillar``
 - The ``makinastates_pillar`` variable content, <br>
   if it is defined as an non empty string, <br/>
