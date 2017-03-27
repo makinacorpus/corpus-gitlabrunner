@@ -33,10 +33,10 @@ TEST_ORIGIN=${TEST_ORIGIN-localhost}
 TEST_ORIGIN_PATH=${TEST_ORIGIN_PATH-/srv/projects/project/project}
 TEST_PROJECT_PATH=${TEST_PROJECT_PATH-/srv/projects/project/project}
 TEST_USE_MAKINASTATES=${TEST_USE_MAKINASTATES-true}
-TEST_PILLAR_FILENAME=${TEST_PILLAR_FILENAME-PILLAR.test}
-TEST_COMMIT=${TEST_COMMIT-HEAD}
+TEST_COMMIT=${TEST_COMMIT-"${CI_COMMIT_SHA:-${CI_BUILD_REF-}}"}
 TEST_SALTCALL_LOGLEVEL=${TEST_SALTCALL_LOGLEVEL-info}
 TEST_ENVIRONMENT_NAME=${CI_ENVIRONMENT_NAME:-default}
+TEST_ANSIBLE_VAULT_PASSWORD=${TEST_ANSIBLE_VAULT_PASSWORD-}
 TEST_ANSIBLE_VAULTS=${TEST_ANSIBLE_VAULTS:-"
 $W/.ansible/vaults/${TEST_ENVIRONMENT_NAME}.yml
 $W/ansible/vaults/${TEST_ENVIRONMENT_NAME}.yml
@@ -72,6 +72,10 @@ get_ansible_inv() {
 
 set_ansible_vault() {
     local ansible_vault="$HOME/.ansiblevaultpassword.${TEST_ENVIRONMENT_NAME}"
+    if [ ! -e ${ansible_vault} ];then
+        echo "${TEST_ANSIBLE_VAULT_PASSWORD}" > "${ansible_vault}"
+        chmod 600 "${ansible_vault}"
+    fi
     if [ -e ${ansible_vault} ];then
         export ANSIBLE_VAULT_PASSWORD_FILE="${ansible_vault}"
     fi

@@ -37,7 +37,6 @@ If you need to use gitlab variables, name them like ``CUSTOM_XXX``. If this real
 | TEST_LXC_HOST                | host to create containers on      |  10.5.0.1                                   |
 | TEST_LXC_PATH                | path of the containers root       |  /var/lib/lxc                               |
 | TEST_LXC_BACKING_STORE       | backing store for container       |  overlayfs                                  |
-| TEST_PILLAR_FILENAME         | project pillar to load from .salt folder       | PILLAR.test |
 | TEST_LXC_TEST_PLAYBOOKS      | space separated abspaths to playbooks to run at test step       | [test.yml](../ansible/playbooks/lxc/lifecycle/test.yml) -> [sub](../ansible/playbooks/lifecycle/test.yml)        |
 | TEST_LXC_CLEANUP_PLAYBOOKS   | space separated abspaths to playbooks to run at cleanup step    | [cleanup.yml](../ansible/playbooks/lxc/cleanup.yml)     |
 | TEST_LXC_CREATE_PLAYBOOKS    | space separated abspaths to playbooks to run at create step     | [create.yml](../ansible/playbooks/lxc/create.yml) |
@@ -53,4 +52,5 @@ If you need to use gitlab variables, name them like ``CUSTOM_XXX``. If this real
 | NO_DEPLOY_EXTRAS         | Skip the extra playbooks run step | not defined |
 | TEST_SYNC_CODE_PLAYBOOKS | space separated abspaths to playbooks to run at sync. code step in deployed env| [sync_code.yml](../ansible/playbooks/lifecycle/sync_code.yml) |
 | TEST_ENV_SETUP_PLAYBOOKS | space separated abspaths to playbooks to run at setup  step     | [env_setup.yml](../ansible/playbooks/lifecycle/env_setup.yml)       |
-| TEST_ANSIBLE_VAULTS | vault location candidates | (.)ansible/vaults/${TEST_ENVIRONMENT_NAME}.yml, (.)ansible/vaults/${TEST_ENVIRONMENT_NAME}.yml, (.)ansible/vaults/default.yml |
+| TEST_ANSIBLE_VAULTS | vault location candidates | (.)ansible/vaults/${TEST_ENVIRONMENT_NAME}.yml, (.)ansible/vaults/${TEST_ENVIRONMENT_NAME}.yml, (.)ansible/vaults/default.yml  |
+| TEST_ANSIBLE_VAULT_PASSWORD | vault password if any | ${CI_ENVIRONMENT_NAME:-} |

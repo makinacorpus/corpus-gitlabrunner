@@ -4,23 +4,17 @@
   vars: {inc_node: "{{test_node|default('all')}}"}
 - hosts: "{{test_node|default('all')}}"
   tasks:
-    #- debug: {msg: "{{vars}}"}
     - name: render pillar from ansible vault
       template:
         src: ../templates/pillar
         dest: "{{ms_pillar}}"
         force: true
         mode: "0644"
-      # attention, this is jinja and we need
-      # to squeeze deep rendering
       when: |-
          {% if (TEST_USE_MAKINASTATES|bool
                 and (vars.get('makinastates_pillar', '')|length)
                 ) %}True{% else%}False{%endif%}
       tags: project_env_setup,project_env_setup_ms
-    #- debug: {msg: "{{vars.get('makinastates_pillar', '')}}"}
-    #- debug: {msg: "{{vars.get('makinastates_pillar', '')|length}}"}
-    #- shell: /bin/false
     - name: build project
       shell: |
         salt-call -l {{TEST_SALTCALL_LOGLEVEL}} --retcode-passthrough \

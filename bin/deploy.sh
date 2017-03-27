@@ -58,7 +58,7 @@ fi
 ### EXTRAS/POST
 
 if [[ -z $NO_DEPLOY_EXTRAS ]];then
-    if [[ -n ${TEST_ENV_SETUP_PLAYBOOKS-} ]];then
+    if [[ -n ${TEST_DEPLOY_PLAYBOOKS-} ]];then
         for i in ${TEST_DEPLOY_PLAYBOOKS:-};do
             ansible_play_vars="${TEST_ANSIBLE_VARS}" \
                 vv silent_run ansible_play "${i}"

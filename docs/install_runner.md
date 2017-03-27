@@ -15,7 +15,6 @@ salt-call mc_project.init_project gitlabrunner remote_less=True
 cd /srv/projects/gitlabrunner/project
 git remote add g https://github.com/makinacorpus/corpus-gitlabrunner
 git fetch --all;git reset --hard g/master
-if ! grep -q data: ../pillar/init.sls 2>&1 >/dev/null ;then cp -vf .salt/PILLAR.test ../pillar/init.sls;fi
 # If the runner is only a CD runner
 sed -i -re "/- lxc_/d"  ../pillar/init.sls # will remove the lxc_tags
 $EDITOR ../pillar/init.sls # at least change the token, see below for examples
