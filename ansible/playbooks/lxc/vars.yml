@@ -6,7 +6,7 @@
 #   - corpusops_lxc_from_container
 #
 - hosts: "{{TEST_LXC_HOST | default('all')}}"
-  roles: [corpusops.vars]
+  roles: [{role: "corpusops.roles/vars"}]
 - hosts: "{{TEST_LXC_HOST | default('all')}}"
   tasks:
     - name: define corpusops lxc vars

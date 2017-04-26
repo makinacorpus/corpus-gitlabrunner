@@ -30,11 +30,11 @@ For more details, see [CI setup](./install_ci_runner.md) & [usage](./ci.md)
 
 - We install a gitlabrunner somewhere
 - This runner can connect as root via ssh to hosts than can spin lxc containers
-  - To preconfigure lxc hosting, we use: [virt_lxc](https://github.com/corpusops/services_virt_lxc)
+  - To preconfigure lxc hosting, we use: [virt_lxc](https://github.com/corpusops/roles/tree/master/services_virt_lxc)
 - As soon as we spin a lxc container we can control it via SSH
   - We use here [lxc_create](https://github.com/corpusops/lxc_create)
   - & [lxc_sshauth](https://github.com/corpusops/lxc_sshauth)
-- In many playbooks, we will call [lxc_register](https://github.com/corpusops/lxc_register) to
+- In many playbooks, we will call [lxc_register](https://github.com/corpusops/roles/tree/master/lxc_register) to
   dynamically load the LXC container inside the current ansible inventory.
 - We can then spin lxc containers and run our test suite on. All this work is done and configurable
   via well placed ansible playbooks and shell scripts that call them

@@ -9,7 +9,7 @@ This will setup LXC
 ```sh
 host=host.foo.net
 bin/ansible-playbook-wrapper -i $host, \
-  /srv/corpusops/corpusops.bootstrap/roles/corpusops.services_virt_lxc/role.yml
+  /srv/corpusops/corpusops.bootstrap/roles/corpusops.roles/services_virt_lxc/role.yml
 ```
 
 ## Drupal & Python templates
