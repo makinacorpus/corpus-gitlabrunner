@@ -5,5 +5,4 @@
 # by its name in further tasks/roles
 - include: "{{GRUNNER_TOP_DIR}}/ansible/playbooks/lxc/vars.yml"
 - hosts: "{{TEST_LXC_HOST|default('all')}}"
-  roles:
-    - role: corpusops.lxc_register
+  roles: [{role: "corpusops.roles/lxc_register"}]

@@ -1,5 +1,5 @@
 ---
-- {hosts: "{{ci_runners|default('all')}}", roles: [{role: corpusops.vars}]}
+- {hosts: "{{ci_runners|default('all')}}", roles: [{role: "corpusops.roles/vars"}]}
 - hosts: "{{ci_runners|default('all')}}"
   tasks:
     - debug: msg=OK
