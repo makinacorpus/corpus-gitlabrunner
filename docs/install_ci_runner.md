@@ -12,6 +12,13 @@ bin/ansible-playbook-wrapper -i $host, \
   /srv/corpusops/corpusops.bootstrap/roles/corpusops.roles/services_virt_lxc/role.yml
 ```
 
+This will setup Docker (opt)
+```sh
+host=host.foo.net
+bin/ansible-playbook-wrapper -i $host, \
+  /srv/corpusops/corpusops.bootstrap/roles/corpusops.roles/services_virt_docker/role.yml
+```
+
 ## Drupal & Python templates
 You can contruct templates via ansible playbooks we baked with this project:
 ```sh
