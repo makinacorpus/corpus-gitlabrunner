@@ -51,7 +51,7 @@ cops_gci_runner_config:
   runners:
     - name: "{{ansible_fqdn}}"
       tag_list:
-        - "{{grains['fqdn']}}"
+        - "{{ansible_fqdn}}"
         - "lxc_python"
         - "makina-states"
 ```
@@ -74,7 +74,7 @@ cops_gci_register_token: "xxx"
 cops_gci_url: "https://gitlab.foo.net"
 cops_gci_runner_config:
   runners:
-    "zzz.makina-corpus.net (via {{grains['fqdn']}})":
+    "zzz.makina-corpus.net (via {{ansible_fqdn}})":
       executor: "ssh"
       tag_list:
         - "zzz.makina-corpus.net"
@@ -82,7 +82,7 @@ cops_gci_runner_config:
         - "makina-states"
       ssh_user: "root"
       ssh_host: "zzz.makina-corpus.net"
-      ssh_identity_file: "/home/users/gitlabrunner-user/.ssh/id_rsa"
+      ssh_identity_file: "/home/gitlab-runner/.ssh/id_rsa"
 ```
 
 ## Install project (will also install corpusops)
