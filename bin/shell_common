@@ -57,17 +57,19 @@ get_ansible_hosts() {
 }
 
 get_ansible_inv() {
-    local ansible_hosts=""
-    for h in $(get_ansible_hosts);do
-        if echo "$ansible_hosts" | xargs -n1 | egrep -vq "^${h}$";then
-            if [[ -n ${ansible_hosts} ]];then
-                ansible_hosts="$ansible_hosts $h"
-            else
-                ansible_hosts="$h"
+    if ! ( echo "${@-}" | egrep -q " -l | --limit" );then
+        local ansible_hosts=""
+        for h in $(get_ansible_hosts);do
+            if echo "$ansible_hosts" | xargs -n1 | egrep -vq "^${h}$";then
+                if [[ -n ${ansible_hosts} ]];then
+                    ansible_hosts="$ansible_hosts $h"
+                else
+                    ansible_hosts="$h"
+                fi
             fi
-        fi
-    done
-    echo "-i ${ANSIBLE_INVENTORY:-${ansible_hosts},}"
+        done
+        echo "-i ${ANSIBLE_INVENTORY:-${ansible_hosts},}"
+    fi
 }
 
 set_ansible_vault() {
@@ -511,39 +513,39 @@ version_gt() {
 }
 
 get_ansible_connection() {
-    if [ "x$(get_ansible_inv)" = "x-i 127.0.0.1," ] \
-        || [ "x$(get_ansible_inv)" = "x-i localhost," ] \
+    if [ "x$(get_ansible_inv $@)" = "x-i 127.0.0.1," ] \
+        || [ "x$(get_ansible_inv $@)" = "x-i localhost," ] \
         ;then
         echo "-c local"
     fi
 }
 
 ansible_playbook_() {
-    local ansible_verb=
+    local ansible_verbose=
     if [[ -n ${DEBUG} ]];then
-        ansible_verb=-vvvvv
+        ansible_verbose=-vvvvv
     fi
     ( \
         set_ansible_vault;
-        export PATH=/srv/corpusops/corpusops.bootstrap/bin:$PATH;
-    vvv ansible-playbook $ansible_verb \
-        $(get_ansible_connection) \
-        $(get_ansible_inv) \
+    set_ansible_path;
+    vvv ansible-playbook $ansible_verbose \
+        $(get_ansible_connection $@) \
+        $(get_ansible_inv $@) \
         "$@" \
         ; );
 }
 
 ansible_() {
-    local ansible_verb=
+    local ansible_verbose=
     if [[ -n ${DEBUG} ]];then
-        ansible_verb=-vvvvv
+        ansible_verbose=-vvvvv
     fi
     ( \
         set_ansible_vault;
-        export PATH=/srv/corpusops/corpusops.bootstrap/bin:$PATH;
-    vvv ansible $ansible_verb \
-        $(get_ansible_connection) \
-        $(get_ansible_inv) \
+    set_ansible_path;
+    vvv ansible $ansible_verbose \
+        $(get_ansible_connection $@) \
+        $(get_ansible_inv $@) \
         "$@" \
         ; );
 }
@@ -580,6 +582,19 @@ print_env_vars() {
     done
 }
 
+set_ansible_path() {
+    for i in \
+        /srv/corpusops.bootstrap \
+        /srv/corpusops/corpusops.bootstrap \
+        ;do
+        bin="$i/bin/ansible-playbook"
+        if [ -x "$bin" ];then
+            export PATH="$i/bin:$PATH"
+            break
+        fi
+    done
+}
+
 re_export_vars() {
     TEST_ANSIBLE_VARS=""
     for i in $( get_all_variables \
@@ -592,6 +607,7 @@ re_export_vars() {
 }
 
 detect_os no_fail
+set_ansible_path
 re_export_vars
 
 if echo "${0}" | egrep -q 'shell_common$';then

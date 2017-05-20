@@ -1,0 +1,36 @@
+---
+- name: "register runners service"
+  shell: |
+      set -e
+      if [ -e /etc/systemd/system/gitlab-runner.service ] && \
+        grep -q "{{cops_gci_runner_dir}}" "{{cops_gci_sdunit}}";then
+        exit 0  # exists & correctly configured
+      fi
+      if [ ! -e /etc/gitlab-runner/config.toml ];then
+        # runners not configured, something is wrong !
+        echo "No runners conf" >&2
+        exit 1
+      fi
+      if test -e "{{cops_gci_sdunit}}" ;then
+        rm -f /etc/systemd/system/gitlab-runner.service
+      fi
+      gitlab-ci-multi-runner install \
+        --config=/etc/gitlab-runner/config.toml \
+        --service={{cops_gci_service}} \
+        --working-directory="{{cops_gci_runner_dir}}" \
+        --user "{{cops_gci_user}}"
+      echo "services updated" >&2
+  register: cops_gci_services_
+  changed_when: "{{'services updated' in cops_gci_services_.stderr}}"
+  notify: [restart_cops_gci_service]
+- {debug: {msg: "{{cops_gci_services_}}"}}
+- name: service
+  cops_service:
+    state: "{{cops_gci_activated
+              | ternary('started', 'stopped')}}"
+    enabled: "{{cops_gci_activated
+                | ternary(True, False)}}"
+    name: "{{item}}"
+  with_items: ["{{cops_gci_service}}"]
+  when: "{{corpusops_vars.has_services_manager}}"
+

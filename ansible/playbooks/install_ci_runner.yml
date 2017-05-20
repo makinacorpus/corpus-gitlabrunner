@@ -1,7 +1,0 @@
----
-- include: install_runner.yml
-- hosts: "{{ci_runners|default('all')}}"
-  tasks:
-    - shell: |
-        cd /srv/projects/gitlabrunner/project
-        salt-call --retcode-passthrough mc_project.deploy gitlabrunner only=install,fixperms

@@ -1,0 +1,49 @@
+---
+- name: setup gitlabrunner pkg
+  shell: |
+    set -ex
+    if ! [ -e /etc/apt/sources.list.d/runner_gitlab-ci-multi-runner.list ];then
+      echo 'setuprunned' >&2
+      curl -L \
+        https://packages.gitlab.com/install/repositories/runner/gitlab-ci-multi-runner/script.deb.sh \
+        | sudo bash
+    fi
+  register: cops_gci_repo
+  changed_when: "{{'setuprunned' in cops_gci_repo.stderr}}"
+  when: "{{ansible_os_family.lower() in ['debian']}}"
+- name: update & install prerequisites
+  package:
+    cache_valid_time: '{{60*60}}'
+    update_cache: yes
+    package: '{{item}}'
+    state: latest
+  when: "{{ansible_os_family.lower() in ['debian']}}"
+  with_items: [gitlab-ci-multi-runner]
+- name: update & install prerequisites
+  package:
+    update_cache: yes
+    enablerepo: epel-testing
+    package: '{{item}}'
+    state: latest
+  when: "{{ansible_os_family.lower() in ['redhat']}}"
+  with_items: [gitlab-ci-multi-runner]
+- name: files
+  file:
+    path: "{{item}}"
+    state: "directory"
+    mode: "0700"
+    owner: "{{cops_gci_user}}"
+    group: "{{cops_gci_group}}"
+  with_items:
+  - "{{cops_gci_runner_dir}}"
+  - "{{cops_gci_cache_dir}}"
+  - "{{cops_gci_builds_dir}}"
+- name: sudo
+  copy:
+    dest: /etc/sudoers.d/gitlabrunner
+    content: |
+      {{cops_gci_user}} ALL=(ALL:ALL) NOPASSWD:ALL
+    mode : 600
+    owner: root
+    group: root
+    force: true

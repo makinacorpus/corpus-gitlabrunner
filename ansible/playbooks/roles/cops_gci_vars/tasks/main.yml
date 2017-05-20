@@ -1,0 +1,20 @@
+---
+- name: force interpolatating of computed variable
+  # Workaround: https://github.com/ansible/ansible/issues/15753
+  # this ends up to compute & load variables, recursivly
+  include_jinja_vars:
+    name: __GLOBAL__
+    content: |
+      ---
+      {% set res = {} %}
+      {% set cops_gci_runners = {} %}
+      {% for runner in vars['cops_gci_runner_config'].get('runners', []) %}
+      {% set _ = cops_gci_runners.update({runner['name']: runner}) %}
+      {% endfor %}
+      {% set _ = vars.update({'cops_gci_runners': cops_gci_runners}) %}
+      {% for i, val in vars.items() | list %}
+      {%  if i.startswith('cops_gci') %}
+      {%    set _ = res.update({i: val}) %}
+      {%  endif %}
+      {% endfor %}
+      {{ res | to_json }}

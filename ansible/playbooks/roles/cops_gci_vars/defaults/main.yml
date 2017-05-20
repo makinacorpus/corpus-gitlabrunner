@@ -1,0 +1,148 @@
+---
+cops_gci_sdunit: /etc/systemd/system/gitlab-runner.service
+cops_gci_cops_url: "https://github.com/corpusops/corpusops.bootstrap.git"
+cops_gci_ms_url: "https://github.com/makinacorpus/makina-states.git"
+cops_gci_url: null
+cops_gci_registration_token: null
+cops_gci_cops_root: "/srv/corpusops/corpusops.bootstrap"
+cops_gci_ms_root: null
+#cops_gci_ms_root: "/srv/makina-states"
+cops_gci_locked: 'true'
+cops_gci_update: true
+cops_gci_glue_path: "/srv/projects/gitlabrunner/project"
+cops_gci_runner_dir: "/srv/nobackup/gitlabrunner"
+cops_gci_builds_dir: "{{cops_gci_runner_dir}}/builds"
+cops_gci_cache_dir: "{{cops_gci_runner_dir}}/cache"
+cops_gci_group: "{{cops_gci_user}}"
+cops_gci_user: "gitlab-runner"
+cops_gci_runner_config: []
+cops_gci_activated: true
+cops_gci_service: gitlab-runner
+cops_gci_runner_config_opts: [
+   "--tag-list",
+   "--leave-runner",
+   "--registration-token",
+   "--run-untagged",
+   "--locked",
+   "--name",
+   "--description",
+   "--limit",
+   "--output-limit",
+   "--request-concurrency",
+   "--url",
+   "--token",
+   "--tls-ca-file",
+   "--executor",
+   "--builds-dir",
+   "--cache-dir",
+   "--env",
+   "--pre-clone-script",
+   "--pre-build-script",
+   "--post-build-script",
+   "--shell",
+   "--ssh-user",
+   "--ssh-password",
+   "--ssh-host",
+   "--ssh-port",
+   "--ssh-identity-file",
+   "--docker-host",
+   "--docker-cert-path",
+   "--docker-tlsverify",
+   "--docker-hostname",
+   "--docker-image",
+   "--docker-cpuset-cpus",
+   "--docker-dns",
+   "--docker-dns-search",
+   "--docker-privileged",
+   "--docker-cap-add",
+   "--docker-cap-drop",
+   "--docker-security-opt",
+   "--docker-devices",
+   "--docker-disable-cache",
+   "--docker-volumes",
+   "--docker-volume-driver",
+   "--docker-cache-dir",
+   "--docker-extra-hosts",
+   "--docker-volumes-from",
+   "--docker-network-mode",
+   "--docker-links",
+   "--docker-services",
+   "--docker-wait-for-services-timeout",
+   "--docker-allowed-images",
+   "--docker-allowed-services",
+   "--docker-pull-policy",
+   "--docker-shm-size",
+   "--parallels-base-name",
+   "--parallels-template-name",
+   "--parallels-disable-snapshots",
+   "--virtualbox-base-name",
+   "--virtualbox-base-snapshot",
+   "--virtualbox-disable-snapshots",
+   "--cache-type",
+   "--cache-s3-server-address",
+   "--cache-s3-access-key",
+   "--cache-s3-secret-key",
+   "--cache-s3-bucket-name",
+   "--cache-s3-bucket-location",
+   "--cache-s3-insecure",
+   "--cache-s3-cache-path",
+   "--cache-cache-shared",
+   "--machine-idle-nodes",
+   "--machine-idle-time",
+   "--machine-max-builds",
+   "--machine-machine-driver",
+   "--machine-machine-name",
+   "--machine-machine-options",
+   "--machine-off-peak-periods",
+   "--machine-off-peak-timezone",
+   "--machine-off-peak-idle-count",
+   "--machine-off-peak-idle-time",
+   "--kubernetes-host",
+   "--kubernetes-cert-file",
+   "--kubernetes-key-file",
+   "--kubernetes-ca-file",
+   "--kubernetes-image",
+   "--kubernetes-namespace",
+   "--kubernetes-namespace_overwrite_allowed",
+   "--kubernetes-privileged",
+   "--kubernetes-cpu-limit",
+   "--kubernetes-memory-limit",
+   "--kubernetes-service-cpu-limit",
+   "--kubernetes-service-memory-limit",
+   "--kubernetes-helper-cpu-limit",
+   "--kubernetes-helper-memory-limit",
+   "--kubernetes-cpu-request",
+   "--kubernetes-memory-request",
+   "--kubernetes-service-cpu-request",
+   "--kubernetes-service-memory-request",
+   "--kubernetes-helper-cpu-request",
+   "--kubernetes-helper-memory-request",
+   "--kubernetes-pull-policy",
+   "--kubernetes-node-selector",
+   "--kubernetes-image-pull-secrets",
+   "--kubernetes-helper-image",
+   "--kubernetes-terminationGracePeriodSeconds",
+   "--kubernetes-poll-interval",
+   "--kubernetes-poll-timeout",
+]
+
+# computed in variables
+cops_gci_runners: {}
+
+# runner descriptions
+# cops_gci_runner_config:
+#   runners:
+#   # name of the runner to register
+#   - "{{ansible_fqdn}}":
+#       # gitlab where to register this runner
+#       # executor: not defined for shell | docker | ssh
+#       executor: "ssh"
+#       # initial tag_list to attach
+#       tag_list:
+#         - "{{ansible_fqdn}}"
+#         - "lxc_python"
+#         - "makina-states"
+#       # optional ssh configuration:
+#       ssh_user: "root"
+#       ssh_host: "zzz.foo.net"
+#       ssh_identity_file: "/home/users/gitlabrunner-user/

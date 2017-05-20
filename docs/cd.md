@@ -38,8 +38,11 @@ NOTE: This is the way we distribute saltstack pillars for makinastates based dep
 ### Install ansible
 You will need to have under the hood a working ansible, at least ``2.2``.
 
-A quick and reliable way to have one is to make a dedicated virtualenv for it.
+### Use corpusops embedded ansible
+- Refer to [install_runner.md#install corpusops](docs/install_runner.md# install corpusops)
 
+#### alternate way
+A quickier and reliable way to have one is to make a dedicated virtualenv for it.
 Don't forget to add his few system requirements (some devel packages and compilers):
 - EG: [Debian](https://github.com/corpusops/corpusops.bootstrap/blob/master/requirements/os_packages.Debian)
 - EG: [Redhat](https://github.com/corpusops/corpusops.bootstrap/blob/master/requirements/os_packages.redhat)

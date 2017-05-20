@@ -1,0 +1,50 @@
+---
+- name: setup corpusops
+  shell: |
+    set -ex
+    if [ ! -e {{cops_gci_cops_root}} ];then
+      git clone {{cops_gci_cops_url}} {{cops_gci_cops_root}}
+      {{cops_gci_cops_root}}/bin/install.sh -C
+    {% if cops_gci_update %}
+    else
+      {{cops_gci_cops_root}}/bin/install.sh -C -s
+    {% endif %}
+    fi
+- name: deploy corpusops-gitlabci glue dir
+  file:
+    state: directory
+    dest: "{{cops_gci_glue_path}}"
+- name: deploy corpusops-gitlabci glue
+  delegate_to: localhost
+  synchronize:
+    compress: false
+    src: "../../../../../"
+    dest: "{{cops_gci_glue_path}}/"
+    rsync_opts:
+      - >-
+        {% if hostvars[inventory_hostname].ansible_connection|default('ssh') not in [
+            'smart', 'local'] %}
+        --rsh='
+        ssh
+        {{ hostvars[inventory_hostname].ansible_ssh_common_args | default('') }}
+        {{ hostvars[inventory_hostname].ansible_ssh_extra_ars | default('') }}
+        '
+        {% endif %}
+      - '-a'
+      - '-z'
+      - '-v'
+      - '--exclude=config'
+      - '--exclude=.git'
+- name: setup makina-states
+  shell: |
+    set -ex
+    {% if cops_gci_ms_root %}
+    if [ ! -e {{cops_gci_ms_root}} ];then
+      git clone {{cops_gci_ms_url}} {{cops_gci_ms_root}}
+      {{cops_gci_ms_root}}/bin/boot-salt2.sh -C --install-links
+    {% if cops_gci_update %}
+    else
+      {{cops_gci_ms_root}}/bin/boot-salt2.sh -C --synchronize-code
+    {% endif %}
+    fi
+    {% endif %}

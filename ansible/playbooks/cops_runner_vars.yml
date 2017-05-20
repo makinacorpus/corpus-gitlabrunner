@@ -1,0 +1,17 @@
+---
+- hosts: "all"
+  roles:
+    - role: "corpusops.roles/vars"
+    - role: "cops_gci_vars"
+  tasks:
+     - debug:
+         msg: |-
+           {% set out = {} %}
+           {% for i in vars %}
+           {%   if i.startswith('cops_gci_') %}
+           {%     set _ = out.update({i: vars[i]}) %}
+           {%   endif %}
+           {% endfor %}
+           {{ out | to_json }}
+     - debug:
+         msg: "{{cops_gci_runners}}"

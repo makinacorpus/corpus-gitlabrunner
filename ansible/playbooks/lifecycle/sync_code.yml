@@ -5,7 +5,7 @@
   vars: {inc_node: "{{test_node | default('all')}}"}
 - hosts: "{{test_node|default('all')}}"
   tasks:
-    - include: "../utils.yml"
+    - include: "../include/utils.yml"
     - name: init project skeleton
       shell: |
         if [ ! -d "{{TEST_PROJECT_PATH}}/.git" ];then

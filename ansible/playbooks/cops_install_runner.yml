@@ -1,0 +1,4 @@
+---
+- hosts: "all"
+  roles: [{role: "corpusops.roles/vars"},
+          {role: "cops_gci_runner"}]

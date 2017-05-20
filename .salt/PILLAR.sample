@@ -18,7 +18,7 @@ makina-projects.projectname:
   data:
     register_token: xxx
     fixperms_cron_periodicity: "0 */2 * * *"
-    modes: ['lxc']
+    executors: ['lxc']
     runner_dir: "{data_root}/runner"
     builds_dir: "{runner_dir}/builds"
     cache_dir: "{runner_dir}/cache"
@@ -30,7 +30,7 @@ makina-projects.projectname:
       #     url: "https://gitlab.xxx.net"
       #     token: "xxxx"
       #     executor: "ssh"
-      #     tags_list: ["lxc", "makina-states"]
+      #     tag_list: ["lxc", "makina-states"]
       #     ssh:
       #       user: "root"
       #       host: "foo.net"
@@ -40,7 +40,7 @@ makina-projects.projectname:
       "{{i}}":
         source: "salt://makina-projects/{name}/files/{{i}}"
         target: "{{i}}"
-        mode: 640
+        executor: 640
         user: root
         group: root
       {%endfor%}

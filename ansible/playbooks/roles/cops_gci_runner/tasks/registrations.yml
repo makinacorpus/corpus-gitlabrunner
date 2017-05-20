@@ -1,0 +1,29 @@
+---
+- name: "register runners"
+  shell: |
+      {%- set runner = item.key -%}
+      {%- set rcfg = item.value %}
+      {%- set opts = [] %}
+      {%- for opt in cops_gci_runner_config_opts %}
+      {%-  set nopt = opt.replace('--', '').replace('-', '_') %}
+      {%-  set val = rcfg.get(opt,
+             rcfg.get(nopt,
+               vars.get('cops_gci_{0}'.format(nopt), None))) %}
+      {%-  if val is none %}
+      {%-   if val == 'executor' %}{% set val = 'shell' %}{% endif %}
+      {%-  endif %}
+      {%-  if nopt in ['tag_list'] %}{% set val = ','.join(val) %}{% endif %}
+      {%-  if val is not none %}{% set _ = opts.append((opt, val)) %}{% endif %}
+      {%- endfor %}
+      if ! (grep -q '  name = "{{runner}}"' "/etc/gitlab-runner/config.toml");then
+          echo "didregistration {{runner}}" >&2
+          gitlab-ci-multi-runner register -n\
+            -c="/etc/gitlab-runner/config.toml"\
+            {% for opt, val in opts %}
+            {{opt}}="{{val}}"\
+            {% endfor %};
+      fi
+  register: cops_gci_registrations
+  with_dict: "{{cops_gci_runners}}"
+  changed_when: "{{'didregistration {{runner}}' in cops_gci_registrations.stderr}}"
+#- {debug: {msg: "{{cops_gci_registrations}}"}}
