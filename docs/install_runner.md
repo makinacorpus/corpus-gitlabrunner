@@ -33,7 +33,7 @@
   group, or host variables.
 
 ## Ansible variables for runners setup
-- CF [ansible/playbooks/roles/cops_gci_vars/defaults/main.yml](ansible/playbooks/roles/cops_gci_vars/defaults/main.yml)
+- CF [ansible/playbooks/roles/cops_gci_vars/defaults/main.yml](../ansible/playbooks/roles/cops_gci_vars/defaults/main.yml)
 - All those variables (from a role) can be overidden
   by standard ansible configurations, like in inventory or variables files that you will pick in the cli by eg:
 
@@ -46,7 +46,7 @@
 ## example variables with configuring a runner for Shell executor
 ```yaml
 cops_gci_register_token: "xxx"
-cops_gci_uel: "https://gitlab.foo.net"
+cops_gci_url: "https://gitlab.foo.net"
 cops_gci_runner_config:
   runners:
     - name: "{{ansible_fqdn}}"
@@ -59,7 +59,7 @@ cops_gci_runner_config:
 ## example variables with configuring a runner for docker executor
 ```yaml
 cops_gci_register_token: "xxx"
-cops_gci_uel: "https://gitlab.foo.net"
+cops_gci_url: "https://gitlab.foo.net"
 cops_gci_runner_config:
   runners:
     - name: '{{ansible_fqdn}} (docker)'
