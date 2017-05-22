@@ -3,7 +3,7 @@
 #   - ms_project_name
 #   - ms_pillar
 - hosts: "{{inc_node}}"
-  roles: [corpusops.vars]
+  roles: [corpusops.roles/vars]
 - hosts: "{{inc_node}}"
   tasks:
     - name: "define makina-states variables (may be not used)"

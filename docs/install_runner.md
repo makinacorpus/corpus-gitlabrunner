@@ -29,12 +29,12 @@ makina-projects.gitlabrunner:
     register_token: "xxx"
     runner_config:
       runners:
-        "zzz.foo.net":
+        "{{grains['fqdn']}}":
           url: "https://gitlab.foo.net"
           tags_list:
+            - "{{grains['fqdn']}}"
             - "lxc_python"
             - "makina-states"
-            - "zzz.foo.net"
 ```
 
 ## example pillar with configuring a runner for SSH executor
@@ -45,10 +45,11 @@ makina-projects.gitlabrunner:
     register_token: "xxx"
     runner_config:
       runners:
-        "zzz.foo.net (CI)":
+        "zzz.makina-corpus.net (via {{grains['fqdn']}})":
           url: "https://gitlab.foo.net"
           executor: "ssh"
           tags_list:
+            - "zzz.makina-corpus.net"
             - "lxc_python"
             - "makina-states"
           ssh:
