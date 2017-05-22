@@ -40,7 +40,7 @@
     ```sh
 	mkdir local
 	$EDITOR local/mycirunner.yml
-    bin/ansible-playbook-wrapper -e @local/mycirunner.yml  [...]
+    bin/ansible-playbook-wrapper -e @local/mycirunner.yml ansible/playbooks/cops_install_runner.yml
     ```
 
 ## example variables with configuring a runner for Shell executor
