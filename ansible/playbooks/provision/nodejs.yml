@@ -1,0 +1,15 @@
+---
+- hosts: "{{provision_node}}"
+  tasks:
+    - name: pillar
+      copy:
+        dest: /srv/makina-states/pillar/pillar.d/nodejs.sls
+        content: |
+          ---
+      tags: nodejs_install
+    - name: re config nodejs
+      saltcall:
+        function: state.sls
+        args: "makina-states.localsettings.nodejs"
+      register: nodejs_install_1
+      tags: nodejs_install
