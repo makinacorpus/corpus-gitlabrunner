@@ -1,0 +1,9 @@
+---
+- hosts: "{{provision_node}}"
+  tasks:
+    - name: disable upgrades
+      file: state=absent path={{item}}
+      with_items:
+        - /etc/apt/apt.conf.d/10periodic
+        - /etc/apt/apt.conf.d/20auto-upgrades
+      tags: disable_upgrades
