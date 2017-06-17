@@ -4,3 +4,5 @@
 - include: "memcached.yml"
 - include: "redis.yml"
 - include: "elasticsearch.yml"
+- include: "nodejs.yml"
+- include: "disable_updates.yml"

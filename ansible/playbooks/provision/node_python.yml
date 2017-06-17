@@ -6,3 +6,5 @@
 - include: "elasticsearch.yml"
 - include: "python.yml"
 - include: "robotframework.yml"
+- include: "nodejs.yml"
+- include: "disable_updates.yml"

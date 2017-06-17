@@ -20,15 +20,15 @@
             https://github.com/corpusops/corpusops.bootstrap.git \
             /srv/corpusops/corpusops.bootstrap
         else
-          cd /srv/makina-states && git stash && git pull
+          cd /srv/corpusops/corpusops.bootstrap git stash && git pull
         fi
       tags: core_install,core_sync_code,core_sync_code_ms_co
     - name: install ms
       shell: /srv/makina-states/bin/boot-salt2.sh -C
       tags: core_install,core_install_ms
     - name: install corpusops
-      shell: /srv/corpusops/corpusops.bootstrap/bin/install.sh -S
+      shell: /srv/corpusops/corpusops.bootstrap/bin/install.sh -C -S
       tags: core_install,core_install_co,core_install_co_install
     - name: install corpusops roles
-      shell: /srv/corpusops/corpusops.bootstrap/bin/install.sh -s
+      shell: /srv/corpusops/corpusops.bootstrap/bin/install.sh -C -s
       tags: core_install,core_install_co,core_install_co_sync
