@@ -10,31 +10,6 @@
       {{cops_gci_cops_root}}/bin/install.sh -C -s
     {% endif %}
     fi
-- name: deploy corpusops-gitlabci glue dir
-  file:
-    state: directory
-    dest: "{{cops_gci_glue_path}}"
-- name: deploy corpusops-gitlabci glue
-  delegate_to: localhost
-  synchronize:
-    compress: false
-    src: "../../../../../"
-    dest: "{{cops_gci_glue_path}}/"
-    rsync_opts:
-      - >-
-        {% if hostvars[inventory_hostname].ansible_connection|default('ssh') not in [
-            'smart', 'local'] %}
-        --rsh='
-        ssh
-        {{ hostvars[inventory_hostname].ansible_ssh_common_args | default('') }}
-        {{ hostvars[inventory_hostname].ansible_ssh_extra_ars | default('') }}
-        '
-        {% endif %}
-      - '-a'
-      - '-z'
-      - '-v'
-      - '--exclude=config'
-      - '--exclude=.git'
 - name: setup makina-states
   shell: |
     set -ex
