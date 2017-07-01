@@ -1,6 +1,6 @@
 #!/usr/bin/env bash
 GRUNNER_TOP_DIR=$(dirname $(dirname  $(readlink -f $0)))
- 
+
 . $GRUNNER_TOP_DIR/bin/deploy_env
 
 cd "$GRUNNER_TOP_DIR"
@@ -13,7 +13,7 @@ Run deploy procedure:
 
  [NOCOLOR=y] \
  [NO_DEPLOY=y] \
- [NO_SYNC=y] \
+ [NO_DT_SYNC=y] \
  [NO_SETUP=y] \
  [NO_DEPLOY_EXTRAS=y] \
  [TEST_PROJECT_PATH=/srv/projects/foo/project] \
@@ -34,6 +34,15 @@ if [[ -n $NO_DEPLOY ]];then
 fi
 
 ### SYNC CODE
+
+if [[ -z $NO_DT_SYNC ]];then
+    ansible_play_vars="${TEST_ANSIBLE_VARS}" \
+        vv silent_run ansible_play \
+            $TEST_DT_SYNC_PLAYBOOKS
+    die_in_error "ansible playbook -DT sync- failed"
+else
+    warn "Skip sync DT step"
+fi
 
 if [[ -z $NO_SYNC ]];then
     ansible_play_vars="${TEST_ANSIBLE_VARS}" \

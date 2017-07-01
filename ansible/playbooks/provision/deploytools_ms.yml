@@ -12,6 +12,7 @@
           if ! git diff --quiet; then
             git stash
           fi
+          git pull
         fi
       tags: core_download,core_download_ms
     - name: install ms

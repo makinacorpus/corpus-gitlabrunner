@@ -12,6 +12,7 @@ Create a container, install project, run tests, destroy container
  [NO_BUILD=y] \
  [NO_CREATE=y] \
  [NO_SYNC=y] \
+ [NO_DT_SYNC=y] \
  [NO_SETUP=y] \
  [NO_TEST=y] \
  [NO_CLEANUP=y] \

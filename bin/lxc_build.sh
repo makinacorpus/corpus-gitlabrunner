@@ -12,6 +12,7 @@ usage() {
  [NO_BUILD=y] \
  [NO_CREATE=y] \
  [NO_SYNC=y] \
+ [NO_DT_SYNC=y] \
  [NO_SETUP=y] \
  [TEST_LXC_HOST=my.baremetal.net] \
  [TEST_LXC_NAME=mycontainer] \
@@ -38,6 +39,13 @@ if [[ -z $NO_CREATE ]];then
     die_in_error "ansible playbook -create- failed"
 else
     warn "Skip create step"
+fi
+if [[ -z $NO_DT_SYNC ]];then
+    ansible_play_vars="${TEST_ANSIBLE_VARS}" \
+        vv silent_run ansible_play $TEST_LXC_DT_SYNC_PLAYBOOKS
+    die_in_error "ansible playbook -DT sync- failed"
+else
+    warn "Skip DT sync step"
 fi
 if [[ -z $NO_SYNC ]];then
     ansible_play_vars="${TEST_ANSIBLE_VARS}" \

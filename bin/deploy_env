@@ -1,6 +1,11 @@
 #!/usr/bin/env bash
 . $GRUNNER_TOP_DIR/bin/shell_common
 
+DEFAULT_TEST_DT_SYNC_PLAYBOOKS="$(first_found_file dt_sync.yml \
+    "$PROJECT_PLAYBOOK_FOLDERS" \
+    "$GRUNNER_TOP_DIR/ansible/playbooks/lifecycle")"
+TEST_DT_SYNC_PLAYBOOKS=${TEST_DT_SYNC_PLAYBOOKS-${DEFAULT_TEST_DT_SYNC_PLAYBOOKS}}
+
 DEFAULT_TEST_SYNC_CODE_PLAYBOOKS="$(first_found_file sync_code.yml \
     "$PROJECT_PLAYBOOK_FOLDERS" \
     "$GRUNNER_TOP_DIR/ansible/playbooks/lifecycle")"
