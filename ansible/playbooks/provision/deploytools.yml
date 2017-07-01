@@ -1,0 +1,3 @@
+---
+- include: "deploytools_ms.yml"
+- include: "deploytools_cops.yml"

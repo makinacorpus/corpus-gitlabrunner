@@ -1,0 +1,26 @@
+---
+- hosts: "{{provision_node}}"
+  tasks:
+    - name: download corpusops
+      shell: |
+        set -ex
+        if [ ! -e /srv/corpusops/corpusops.bootstrap ];then
+          git clone \
+            https://github.com/corpusops/corpusops.bootstrap.git \
+            /srv/corpusops/corpusops.bootstrap
+        else
+          cd /srv/corpusops/corpusops.bootstrap
+          if ! git diff --quiet; then
+            git stash
+          fi
+        fi
+      tags: core_install,core_sync_code,core_sync_code_ms_co
+    - name: install corpusops
+      shell: |
+          if ! ( /srv/corpusops/corpusops.bootstrap/venv/bin/ansible --help >/dev/null 2>&1 );then
+            cd /srv/corpusops/corpusops.bootstrap && bin/install.sh -C -S
+          fi
+      tags: core_install,core_co,core_install_co
+    - name: Upgrade corpusops
+      shell: cd /srv/corpusops/corpusops.bootstrap && bin/install.sh -C -s
+      tags: core_up,core_co,core_up_co

@@ -1,0 +1,26 @@
+---
+- hosts: "{{provision_node}}"
+  tasks:
+    - name: download ms
+      shell: |
+        set -ex
+        if [ ! -e /srv/makina-states ];then
+          git clone \
+            https://github.com/makinacorpus/makina-states.git \
+            /srv/makina-states
+          cd /srv/makina-states
+          if ! git diff --quiet; then
+            git stash
+          fi
+        fi
+      tags: core_install,core_sync_code,core_sync_code_ms
+    - name: install ms
+      shell: |
+          if ! ( /srv/makina-states/venv/bin/salt-call --help >/dev/null 2>&1 ) &&\
+             ! ( /srv/makina-states/venv/bin/ansible --help >/dev/null 2>&1 );then
+            /srv/makina-states/bin/boot-salt2.sh -C
+          fi
+      tags: core_install,core_install_ms
+    - name: Upgrade ms
+      shell: /srv/makina-states/bin/boot-salt2.sh -C --synchronize-code
+      tags: core_up,core_up_ms
