@@ -44,5 +44,5 @@
         function: mc_project.deploy
         args: "only=install,fixperms pgsql"
       register: pgsql_install_2
-      when: "{{not pgsql_install_1.result.status}}"
+      when: "not pgsql_install_1.result.status"
       tags: pgsql_install

@@ -46,5 +46,5 @@
         function: mc_project.deploy
         args: "only=install,fixperms mysql"
       register: mysql_install_2
-      when: "{{mysql_install_1.result.retcode != 0}}"
+      when: "mysql_install_1.result.retcode != 0"
       tags: mysql_install

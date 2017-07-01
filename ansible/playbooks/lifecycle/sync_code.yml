@@ -12,13 +12,13 @@
           salt-call -l {{TEST_SALTCALL_LOGLEVEL}} --retcode-passthrough \
             mc_project.init_project {{ms_project_name}} remote_less=True
         fi
-      when: "{{TEST_USE_MAKINASTATES}}"
+      when: "TEST_USE_MAKINASTATES"
       tags: project_sync
     - name: "init project skeleton -- dir"
       shell: |
         mkdir -pv  "{{TEST_PROJECT_PATH}}/.git"
       tags: project_sync
-      when: "{{not TEST_USE_MAKINASTATES}}"
+      when: "not TEST_USE_MAKINASTATES"
     - name: Synchronise project code to container
       synchronize:
         compress: false
@@ -54,18 +54,18 @@
         salt-call -l {{TEST_SALTCALL_LOGLEVEL}} --retcode-passthrough \
           mc_project.deploy {{ms_project_name}} only=fixperms
       tags: project_sync
-      when: "{{TEST_USE_MAKINASTATES}}"
+      when: "TEST_USE_MAKINASTATES"
     - name: sync commit
       shell: |
         set -ex
         cd  {{TEST_PROJECT_PATH}}
         git reset --hard {{TEST_COMMIT}}
       tags: project_sync
-      when: "{{TEST_USE_MAKINASTATES}}"
+      when: "TEST_USE_MAKINASTATES"
     - name: fix perms - post
       shell: |
         salt-call -l {{TEST_SALTCALL_LOGLEVEL}} --retcode-passthrough \
           mc_project.deploy {{ms_project_name}} only=fixperms
       tags: project_sync
-      when: "{{TEST_USE_MAKINASTATES}}"
+      when: "TEST_USE_MAKINASTATES"
     #- shell: /bin/false

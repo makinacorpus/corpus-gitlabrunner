@@ -8,4 +8,4 @@
     update_cache: yes
     name: "{{util}}"
     state: installed
-  when: "{{not install_util_test.stat.exists}}"
+  when: "not install_util_test.stat.exists"

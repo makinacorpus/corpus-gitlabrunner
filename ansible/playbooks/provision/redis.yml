@@ -20,5 +20,5 @@
         function: state.sls
         args: "makina-states.services.db.redis"
       register: redis_install_2
-      when: "{{redis_install_1.result.retcode != 0}}"
+      when: "redis_install_1.result.retcode != 0"
       tags: redis_install

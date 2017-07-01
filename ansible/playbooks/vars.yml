@@ -33,7 +33,7 @@
           skip: true
     - name: "include vault data"
       include_vars: "{{project_vars_vault_file.results[0].msg}}"
-      when: "{{ (project_vars_vault_file.results|length) > 0}}"
+      when: "(project_vars_vault_file.results|length) > 0"
     #- debug: {msg: "{{ makinastates_pillar|default('') }}"}
     #- shell: /bin/false
 

@@ -9,15 +9,15 @@
         | sudo bash
     fi
   register: cops_gci_repo
-  changed_when: "{{'setuprunned' in cops_gci_repo.stderr}}"
-  when: "{{ansible_os_family.lower() in ['debian']}}"
+  changed_when: "'setuprunned' in cops_gci_repo.stderr"
+  when: "ansible_os_family.lower() in ['debian']"
 - name: update & install prerequisites
   package:
     cache_valid_time: '{{60*60}}'
     update_cache: yes
     package: '{{item}}'
     state: latest
-  when: "{{ansible_os_family.lower() in ['debian']}}"
+  when: "ansible_os_family.lower() in ['debian']"
   with_items: [gitlab-ci-multi-runner]
 - name: update & install prerequisites
   package:
@@ -25,7 +25,7 @@
     enablerepo: epel-testing
     package: '{{item}}'
     state: latest
-  when: "{{ansible_os_family.lower() in ['redhat']}}"
+  when: "ansible_os_family.lower() in ['redhat']"
   with_items: [gitlab-ci-multi-runner]
 - name: files
   file:

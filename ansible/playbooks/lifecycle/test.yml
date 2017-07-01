@@ -8,10 +8,10 @@
     - name: test project under makina-states
       shell: |
              /bin/true
-      when: "{{TEST_USE_MAKINASTATES}}"
+      when: "TEST_USE_MAKINASTATES"
       tags: project_test
     - name: test project without makina-states
       shell: |
              /bin/true
-      when: "{{not (TEST_USE_MAKINASTATES)}}"
+      when: "not (TEST_USE_MAKINASTATES)"
       tags: project_test

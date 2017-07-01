@@ -1,6 +1,6 @@
 ---
 - debug: msg="OK"
-  failed_when: "{{ not(cops_gci_url and cops_gci_registration_token)}}"
+  failed_when: "not(cops_gci_url and cops_gci_registration_token)"
 - {include: ./deploy_tools.yml,   tags: [runner_deploy_tools]}
 - {include: ./glue.yml,           tags: [runner_glue]}
 - {include: ./install_runner.yml, tags: [runner_install]}

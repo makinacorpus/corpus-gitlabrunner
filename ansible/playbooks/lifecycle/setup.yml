@@ -10,14 +10,11 @@
         dest: "{{ms_pillar}}"
         force: true
         mode: "0644"
-      when: |-
-         {% if (TEST_USE_MAKINASTATES|bool
-                and (vars.get('makinastates_pillar', '')|length)
-                ) %}True{% else%}False{%endif%}
+      when: "(TEST_USE_MAKINASTATES|bool and ((vars.get('makinastates_pillar', '')|length) > 0))"
       tags: project_setup,project_setup_ms
     - name: build project
       shell: |
         salt-call -l {{TEST_SALTCALL_LOGLEVEL}} --retcode-passthrough \
           mc_project.deploy {{ms_project_name}} only=install,fixperms
-      when: "{{TEST_USE_MAKINASTATES}}"
+      when: "TEST_USE_MAKINASTATES"
       tags: project_setup,project_setup_ms

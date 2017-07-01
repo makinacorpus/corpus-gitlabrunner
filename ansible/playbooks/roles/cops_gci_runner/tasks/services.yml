@@ -21,7 +21,7 @@
         --user "{{cops_gci_user}}"
       echo "services updated" >&2
   register: cops_gci_services_
-  changed_when: "{{'services updated' in cops_gci_services_.stderr}}"
+  changed_when: "'services updated' in cops_gci_services_.stderr"
   notify: [restart_cops_gci_service]
 - {debug: {msg: "{{cops_gci_services_}}"}}
 - name: service
@@ -32,5 +32,5 @@
                 | ternary(True, False)}}"
     name: "{{item}}"
   with_items: ["{{cops_gci_service}}"]
-  when: "{{corpusops_vars.has_services_manager}}"
+  when: "corpusops_vars.has_services_manager"
 
