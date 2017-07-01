@@ -22,8 +22,8 @@
     - name: Synchronise project code to container
       synchronize:
         compress: false
-        src: '{{TEST_ORIGIN_PATH}}/.git/'
-        dest: "/{{TEST_PROJECT_PATH}}/.git/"
+        src: "{{TEST_ORIGIN_PATH}}/.git/"
+        dest: "{{TEST_PROJECT_PATH}}/.git/"
         rsync_opts:
           - >-
             --rsh='
