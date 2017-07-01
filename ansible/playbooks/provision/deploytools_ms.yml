@@ -13,7 +13,7 @@
             git stash
           fi
         fi
-      tags: core_install,core_sync_code,core_sync_code_ms
+      tags: core_download,core_download_ms
     - name: install ms
       shell: |
           if ! ( /srv/makina-states/venv/bin/salt-call --help >/dev/null 2>&1 ) &&\

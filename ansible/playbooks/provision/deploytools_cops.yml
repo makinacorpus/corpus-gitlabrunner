@@ -14,7 +14,7 @@
             git stash
           fi
         fi
-      tags: core_install,core_sync_code,core_sync_code_ms_co
+      tags: core_download,core_download_cops
     - name: install corpusops
       shell: |
           if ! ( /srv/corpusops/corpusops.bootstrap/venv/bin/ansible --help >/dev/null 2>&1 );then
