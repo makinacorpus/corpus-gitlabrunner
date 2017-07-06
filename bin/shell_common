@@ -36,18 +36,36 @@ TEST_PROJECT_PATH=${TEST_PROJECT_PATH-/srv/projects/project/project}
 TEST_USE_MAKINASTATES=${TEST_USE_MAKINASTATES-true}
 TEST_COMMIT=${TEST_COMMIT-"${CI_COMMIT_SHA:-${CI_BUILD_REF-}}"}
 TEST_SALTCALL_LOGLEVEL=${TEST_SALTCALL_LOGLEVEL-info}
-TEST_ENVIRONMENT_NAME=${CI_ENVIRONMENT_NAME:-default}
-TEST_ANSIBLE_VAULT_PASSWORD=${TEST_ANSIBLE_VAULT_PASSWORD-}
-TEST_ANSIBLE_VAULTS=${TEST_ANSIBLE_VAULTS:-"
-$W/.ansible/vaults/${TEST_ENVIRONMENT_NAME}.yml
-$W/ansible/vaults/${TEST_ENVIRONMENT_NAME}.yml
-$W/ansible/vaults/default.yml
-$W/.ansible/vaults/default.yml
-"}
-
 PROJECT_PLAYBOOK_FOLDERS="
 $W/ansible/playbooks/
 $W/.ansible/playbooks/"
+
+set_env_and_vaults_vars() {
+    TEST_ENVIRONMENT_NAME=${TEST_ENVIRONMENT_NAME:-${CI_ENVIRONMENT_NAME:-default}}
+    TEST_COMMIT_REF_NAME=${TEST_COMMIT_REF_NAME-${CI_COMMIT_REF_NAME:-}}
+    TEST_ANSIBLE_VAULT_PASSWORD=${TEST_ANSIBLE_VAULT_PASSWORD-}
+    TEST_ENV_ANSIBLE_VAULTS_DEFAULT="$W/.ansible/vaults/${TEST_ENVIRONMENT_NAME}.yml $W/ansible/vaults/${TEST_ENVIRONMENT_NAME}.yml"
+    TEST_REF_ANSIBLE_VAULTS_DEFAULT="$W/.ansible/vaults/${TEST_COMMIT_REF_NAME}.yml $W/ansible/vaults/${TEST_COMMIT_REF_NAME}.yml"
+    TEST_DEFAULT_ANSIBLE_VAULTS_DEFAULT="$W/ansible/vaults/default.yml $W/.ansible/vaults/default.yml"
+
+
+    TEST_ENV_ANSIBLE_VAULTS=${TEST_ENV_ANSIBLE_VAULTS-$TEST_ENV_ANSIBLE_VAULTS_DEFAULT}
+    TEST_REF_ANSIBLE_VAULTS=${TEST_REF_ANSIBLE_VAULTS-$TEST_REF_ANSIBLE_VAULTS_DEFAULT}
+    TEST_DEFAULT_ANSIBLE_VAULTS=${TEST_DEFAULT_ANSIBLE_VAULTS-$TEST_DEFAULT_ANSIBLE_VAULTS_DEFAULT}
+
+    if [[ -z $TEST_ANSIBLE_VAULTS ]];then
+        TEST_ANSIBLE_VAULTS="$TEST_ENV_ANSIBLE_VAULTS"
+        if [[ -n "${TEST_COMMIT_REF_NAME}" ]];then
+            TEST_ANSIBLE_VAULTS="$TEST_ANSIBLE_VAULTS $TEST_REF_ANSIBLE_VAULTS"
+        fi
+        TEST_ANSIBLE_VAULTS="$TEST_ANSIBLE_VAULTS $TEST_DEFAULT_ANSIBLE_VAULTS"
+    fi
+
+    export TEST_ENV_ANSIBLE_VAULTS
+    export TEST_REF_ANSIBLE_VAULTS
+    export TEST_DEFAULT_ANSIBLE_VAULTS
+    export TEST_ANSIBLE_VAULTS
+}
 
 get_all_variables() {
     set | awk -F '=' '! /^[0-9A-Z_a-z]+=/ {exit} {print $1}' | sort -u
@@ -74,13 +92,24 @@ get_ansible_inv() {
 }
 
 set_ansible_vault() {
-    local ansible_vault="$HOME/.ansiblevaultpassword.${TEST_ENVIRONMENT_NAME}"
-    if [ ! -e ${ansible_vault} ];then
-        echo "${TEST_ANSIBLE_VAULT_PASSWORD}" > "${ansible_vault}"
-        chmod 600 "${ansible_vault}"
-    fi
-    if [ -e ${ansible_vault} ];then
-        export ANSIBLE_VAULT_PASSWORD_FILE="${ansible_vault}"
+    local ansible_vault_password_file=""
+    for i in $TEST_ANSIBLE_VAULTS;do
+        if [ -e "$i" ];then
+            local candidate="$HOME/.ansiblevaultpassword.$(basename $i|sed -e "s/\(.\+\)\.[^.]\+/\1/")"
+            if [[ -n $TEST_ANSIBLE_VAULT_PASSWORD ]];then
+                echo "${TEST_ANSIBLE_VAULT_PASSWORD}" > "${candidate}"
+                chmod 600 "${ansible_vault_password_file}"
+            fi
+            if [ -e "$candidate" ];then
+                ansible_vault_password_file="$candidate"
+            fi
+            if [[ -n $ansible_vault_password_file ]];then
+                break
+            fi
+        fi
+    done
+    if [[ -n $ansible_vault_password_file ]] && [ -e ${ansible_vault_password_file} ];then
+        export ANSIBLE_VAULT_PASSWORD_FILE="${ansible_vault_password_file}"
     fi
 }
 
@@ -609,6 +638,7 @@ re_export_vars() {
 
 detect_os no_fail
 set_ansible_path
+set_env_and_vaults_vars
 re_export_vars
 
 if echo "${0}" | egrep -q 'shell_common$';then

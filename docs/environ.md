@@ -12,6 +12,7 @@ If you need to use gitlab variables, name them like ``CUSTOM_XXX``. If this real
 | ---------------------------- | --------------------------------- |  -------------------------------            |
 | GRUNNER_TOP_DIR              | root path of this repo                         | /srv/projects/gitlabrunner/project |
 | TEST_COMMIT                  | commit that will be tested                     |  HEAD                          |
+| TEST_COMMIT_REF_NAME         | branch/tag that will be tested                 |                                |
 | TEST_SALTCALL_LOGLEVEL       | salt-call loglevel | info                      |                                |
 | TEST_USE_MAKINASTATES        | is the project makinastates based              |  true                          |
 | TEST_ORIGIN                  | from where to push sources inside the test env | gitlab ci host (localhost)     |
@@ -52,5 +53,5 @@ If you need to use gitlab variables, name them like ``CUSTOM_XXX``. If this real
 | NO_DEPLOY_EXTRAS         | Skip the extra playbooks run step | not defined |
 | TEST_SYNC_CODE_PLAYBOOKS | space separated abspaths to playbooks to run at sync. code step in deployed env| [sync_code.yml](../ansible/playbooks/lifecycle/sync_code.yml) |
 | TEST_ENV_SETUP_PLAYBOOKS | space separated abspaths to playbooks to run at setup  step     | [env_setup.yml](../ansible/playbooks/lifecycle/env_setup.yml)       |
-| TEST_ANSIBLE_VAULTS | vault location candidates | (.)ansible/vaults/${TEST_ENVIRONMENT_NAME}.yml, (.)ansible/vaults/${TEST_ENVIRONMENT_NAME}.yml, (.)ansible/vaults/default.yml  |
+| TEST_ANSIBLE_VAULTS | vault location candidates | (.)ansible/vaults/${TEST_ENVIRONMENT_NAME}.yml, (.)ansible/vaults/${TEST_COMMIT_REF_NAME}.yml, (.)ansible/vaults/default.yml  |
 | TEST_ANSIBLE_VAULT_PASSWORD | vault password if any | |
