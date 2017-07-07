@@ -65,6 +65,7 @@ set_env_and_vaults_vars() {
     export TEST_REF_ANSIBLE_VAULTS
     export TEST_DEFAULT_ANSIBLE_VAULTS
     export TEST_ANSIBLE_VAULTS
+
 }
 
 get_all_variables() {
@@ -76,7 +77,9 @@ get_ansible_hosts() {
 }
 
 get_ansible_inv() {
-    if ! ( echo "${@-}" | egrep -q " -l | --limit" );then
+    if  echo "${@-}" | egrep -q -- "( -i )|(^-i )";then
+        : ALREADY AN INVENTORY IN CLI !
+    elif ! ( echo "${@-}" | egrep -q " -l | --limit" );then
         local ansible_hosts=""
         for h in $(get_ansible_hosts);do
             if echo "$ansible_hosts" | xargs -n1 | egrep -vq "^${h}$";then
@@ -95,16 +98,19 @@ set_ansible_vault() {
     local ansible_vault_password_file=""
     for i in $TEST_ANSIBLE_VAULTS;do
         if [ -e "$i" ];then
-            local candidate="$HOME/.ansiblevaultpassword.$(basename $i|sed -e "s/\(.\+\)\.[^.]\+/\1/")"
-            if [[ -n $TEST_ANSIBLE_VAULT_PASSWORD ]];then
-                echo "${TEST_ANSIBLE_VAULT_PASSWORD}" > "${candidate}"
-                chmod 600 "${ansible_vault_password_file}"
-            fi
-            if [ -e "$candidate" ];then
-                ansible_vault_password_file="$candidate"
-            fi
-            if [[ -n $ansible_vault_password_file ]];then
-                break
+            local pn=$(basename $i|sed -e "s/\(.\+\)\.[^.]\+/\1/")
+            local candidate="$HOME/.ansiblevaultpassword.$pn"
+            if [ "x${pn}" != "xdefault" ];then
+                if [[ -n $TEST_ANSIBLE_VAULT_PASSWORD ]];then
+                    echo "${TEST_ANSIBLE_VAULT_PASSWORD}" > "${candidate}"
+                    chmod 600 "${ansible_vault_password_file}"
+                fi
+                if [ -e "$candidate" ];then
+                    ansible_vault_password_file="$candidate"
+                fi
+                if [[ -n $ansible_vault_password_file ]];then
+                    break
+                fi
             fi
         fi
     done
