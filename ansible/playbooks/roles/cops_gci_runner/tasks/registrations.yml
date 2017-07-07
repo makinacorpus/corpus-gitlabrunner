@@ -25,5 +25,5 @@
       fi
   register: cops_gci_registrations
   with_dict: "{{cops_gci_runners}}"
-  changed_when: "'didregistration {0}'.format(runner) in cops_gci_registrations.stderr"
+  changed_when: "'didregistration {0}'.format(item.key) in cops_gci_registrations.stderr"
 #- {debug: {msg: "{{cops_gci_registrations}}"}}
