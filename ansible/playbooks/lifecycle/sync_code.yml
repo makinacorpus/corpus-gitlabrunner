@@ -26,11 +26,9 @@
         dest: "{{TEST_PROJECT_PATH}}/.git/"
         rsync_opts:
           - >-
-            --rsh='
-            ssh
-            {{ hostvars[inventory_hostname].ansible_ssh_common_args | default('') }}
-            {{ hostvars[inventory_hostname].ansible_ssh_extra_ars | default('') }}
-            '
+            --rsh='{{"ssh {0} {1}".format(
+              hostvars[inventory_hostname].ansible_ssh_common_args | default(''),
+              hostvars[inventory_hostname].ansible_ssh_extra_ars | default('')).strip() }}'
           - '-a'
           - '-z'
           - '-v'
