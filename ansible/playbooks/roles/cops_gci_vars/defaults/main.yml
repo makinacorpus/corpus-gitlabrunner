@@ -15,7 +15,7 @@ cops_gci_builds_dir: "{{cops_gci_runner_dir}}/builds"
 cops_gci_cache_dir: "{{cops_gci_runner_dir}}/cache"
 cops_gci_group: "{{cops_gci_user}}"
 cops_gci_user: "gitlab-runner"
-cops_gci_runner_config: []
+cops_gci_runner_config: {}
 cops_gci_activated: true
 cops_gci_service: gitlab-runner
 cops_gci_runner_config_opts: [
@@ -128,6 +128,9 @@ cops_gci_runner_config_opts: [
 
 # computed in variables
 cops_gci_runners: {}
+#cops_gci_vaults_passwords:
+#  prod-a.foo.net:
+#    production: xxxsecretxxx
 
 # runner descriptions
 # cops_gci_runner_config:
