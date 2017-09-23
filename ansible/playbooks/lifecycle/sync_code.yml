@@ -1,7 +1,7 @@
 ---
 # Pushes latests commits inside project container
 # and update working copy to it.
-- include_playbook: "{{GRUNNER_TOP_DIR}}/ansible/playbooks/vars.yml"
+- import_playbook: "{{GRUNNER_TOP_DIR}}/ansible/playbooks/vars.yml"
   vars: {inc_node: "{{test_node | default('all')}}"}
 - hosts: "{{test_node|default('all')}}"
   tasks:

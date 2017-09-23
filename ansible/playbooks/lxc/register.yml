@@ -3,6 +3,6 @@
 # ansible inventory.
 # This will allow us to reference the container
 # by its name in further tasks/roles
-- include_playbook: "{{GRUNNER_TOP_DIR}}/ansible/playbooks/lxc/vars.yml"
+- import_playbook: "{{GRUNNER_TOP_DIR}}/ansible/playbooks/lxc/vars.yml"
 - hosts: "{{TEST_LXC_HOST|default('all')}}"
   roles: [{role: "corpusops.roles/lxc_register"}]

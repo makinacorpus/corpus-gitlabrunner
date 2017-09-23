@@ -1,5 +1,5 @@
 ---
 # delete container and any related resources from one host
-- include_playbook: "{{GRUNNER_TOP_DIR}}/ansible/playbooks/lxc/vars.yml"
+- import_playbook: "{{GRUNNER_TOP_DIR}}/ansible/playbooks/lxc/vars.yml"
 - hosts: "{{TEST_LXC_HOST|default('all')}}"
   roles: [{role: "corpusops.roles/lxc_drop"}]

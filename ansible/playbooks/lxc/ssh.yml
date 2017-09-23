@@ -1,5 +1,5 @@
 ---
 # add this host ssh key to lxc 's root user authorized_keys
-- include_playbook: "{{GRUNNER_TOP_DIR}}/ansible/playbooks/lxc/vars.yml"
+- import_playbook: "{{GRUNNER_TOP_DIR}}/ansible/playbooks/lxc/vars.yml"
 - hosts: "{{TEST_LXC_HOST|default('all')}}"
   roles: [{role: "corpusops.roles/lxc_sshauth"}]
