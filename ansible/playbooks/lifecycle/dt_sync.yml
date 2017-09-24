@@ -1,8 +1,8 @@
 ---
 # Pushes latests commits inside project container
 # and update working copy to it.
-- include: "{{GRUNNER_TOP_DIR}}/ansible/playbooks/vars.yml"
+- include_playbook: "{{GRUNNER_TOP_DIR}}/ansible/playbooks/vars.yml"
   vars: {inc_node: "{{test_node | default('all')}}"}
-- include: "{{GRUNNER_TOP_DIR}}/ansible/playbooks/provision/deploytools.yml"
+- include_playbook: "{{GRUNNER_TOP_DIR}}/ansible/playbooks/provision/deploytools.yml"
   vars: {provision_node:  "{{test_node | default('all')}}"} 
 

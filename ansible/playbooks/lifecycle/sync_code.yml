@@ -1,11 +1,11 @@
 ---
 # Pushes latests commits inside project container
 # and update working copy to it.
-- include: "{{GRUNNER_TOP_DIR}}/ansible/playbooks/vars.yml"
+- include_playbook: "{{GRUNNER_TOP_DIR}}/ansible/playbooks/vars.yml"
   vars: {inc_node: "{{test_node | default('all')}}"}
 - hosts: "{{test_node|default('all')}}"
   tasks:
-    - include: "../include/utils.yml"
+    - include_tasks: "../include/utils.yml"
     - name: init project skeleton
       shell: |
         if [ ! -d "{{TEST_PROJECT_PATH}}/.git" ];then
