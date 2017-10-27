@@ -7,18 +7,15 @@
   delegate_to: localhost
   synchronize:
     compress: false
+    ssh_args: >-
+        {% if hostvars[inventory_hostname].ansible_connection|default('ssh') not in [
+            'smart', 'local'] %}
+        {{ hostvars[inventory_hostname].ansible_ssh_common_args | default('') }}
+        {{ hostvars[inventory_hostname].ansible_ssh_extra_ars | default('') }}
+        {% endif %}
     src: "../../../../../"
     dest: "{{cops_gci_glue_path}}/"
     rsync_opts:
-      - >-
-        {% if hostvars[inventory_hostname].ansible_connection|default('ssh') not in [
-            'smart', 'local'] %}
-        --rsh='
-        ssh
-        {{ hostvars[inventory_hostname].ansible_ssh_common_args | default('') }}
-        {{ hostvars[inventory_hostname].ansible_ssh_extra_ars | default('') }}
-        '
-        {% endif %}
       - '-a'
       - '-z'
       - '-v'
