@@ -671,7 +671,7 @@ save_to_env_file() {
         ( for i in $( get_all_variables \
           | egrep "${TEST_FORWARDED_SHELL_VARS}" \
           | egrep -v "TEST_ANSIBLE_VARS");do
-            eval "echo \"${i}='\${${i}}'\""
+            eval "echo \"export ${i}='\${${i}}'\""
           done; )> "$TEST_DEPLOY_ENV_FILE"
     fi
 }
