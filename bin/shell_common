@@ -678,7 +678,9 @@ save_to_env_file() {
 
 remove_env_file() {
     if [[ -n $NO_CLEANUP ]];then
-        warn "NO_CLEANUP set, not envfile cleanup"
+        if [[ -f $TEST_DEPLOY_ENV_FILE ]];then
+            warn "NO_CLEANUP set, not envfile cleanup: $TEST_DEPLOY_ENV_FILE"
+        fi
     else
         if [[ -f $TEST_DEPLOY_ENV_FILE ]];then
             rm $TEST_DEPLOY_ENV_FILE
