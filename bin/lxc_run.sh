@@ -32,6 +32,7 @@ parse_cli() {
     parse_cli_common "${@}"
 }
 parse_cli "$@"
+save_to_env_file
 
 ### Build
 $TEST_LXC_BUILD_SCRIPT
@@ -60,5 +61,6 @@ if [ "x${cleanup_ret}" != "x0" ] && [ "x${ret}" = "x0" ]; then
     log "Tests success but cleanup failed"
     ret=${cleanup_ret}
 fi
+remove_env_file
 exit ${ret}
 # vim:set et sts=4 ts=4 tw=80:
