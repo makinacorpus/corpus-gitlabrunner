@@ -40,13 +40,6 @@ PROJECT_PLAYBOOK_FOLDERS="
 $W/ansible/playbooks/
 $W/.ansible/playbooks/"
 
-
-set_deploy_env_file() {
-    TEST_DEPLOY_ENV_FILE=/${TEST_ORIGIN}_${TEST_ORIGIN_PATH}_${TEST_PROJECT_PATH}_${TEST_COMMIT}_${TEST_COMMIT_REF_NAME}.env
-    TEST_DEPLOY_ENV_FILE=${TMPDIR:-/tmp}/${TEST_DEPLOY_ENV_FILE//\//}
-}
-
-
 set_env_and_vaults_vars() {
     TEST_ENVIRONMENT_NAME=${TEST_ENVIRONMENT_NAME:-${CI_ENVIRONMENT_NAME:-default}}
     TEST_COMMIT_REF_NAME=${TEST_COMMIT_REF_NAME-${CI_COMMIT_REF_NAME:-}}
@@ -68,7 +61,6 @@ set_env_and_vaults_vars() {
         TEST_ANSIBLE_VAULTS="$TEST_ANSIBLE_VAULTS $TEST_DEFAULT_ANSIBLE_VAULTS"
     fi
 
-    export TEST_DEPLOY_ENV_FILE
     export TEST_ENV_ANSIBLE_VAULTS
     export TEST_REF_ANSIBLE_VAULTS
     export TEST_DEFAULT_ANSIBLE_VAULTS
@@ -622,7 +614,7 @@ first_found_file() {
 print_env_vars() {
     for i in $( get_all_variables \
         | egrep "${TEST_FORWARDED_SHELL_VARS}");do
-        eval "echo \"${i}='\${${i}}'\""
+        eval "echo ${i}=\"\${${i}}\""
     done
 }
 
@@ -641,7 +633,6 @@ set_ansible_path() {
 
 re_export_vars() {
     TEST_ANSIBLE_VARS=""
-    set_deploy_env_file
     for i in $( get_all_variables \
         | egrep "${TEST_FORWARDED_SHELL_VARS}" \
         | egrep -v "TEST_ANSIBLE_VARS" );do
@@ -654,7 +645,6 @@ re_export_vars() {
 detect_os no_fail
 set_ansible_path
 set_env_and_vaults_vars
-set_deploy_env_file
 re_export_vars
 
 if echo "${0}" | egrep -q 'shell_common$';then
@@ -665,24 +655,4 @@ if echo "${0}" | egrep -q 'shell_common$';then
         exit 1
     fi
 fi
-
-save_to_env_file() {
-    if [[ -n "$TEST_DEPLOY_ENV_FILE" ]];then
-        ( for i in $( get_all_variables \
-          | egrep "${TEST_FORWARDED_SHELL_VARS}" \
-          | egrep -v "TEST_ANSIBLE_VARS");do
-            eval "echo \"${i}='\${${i}}'\""
-          done; )> "$TEST_DEPLOY_ENV_FILE"
-    fi
-}
-
-remove_env_file() {
-    if [[ -n $NO_CLEANUP ]];then
-        warn "NO_CLEANUP set, not envfile cleanup"
-    else
-        if [[ -f $TEST_DEPLOY_ENV_FILE ]];then
-            rm $TEST_DEPLOY_ENV_FILE
-        fi
-    fi
-}
 # vim:set et sts=4 ts=4 tw=0:

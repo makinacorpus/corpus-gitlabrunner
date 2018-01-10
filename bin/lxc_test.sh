@@ -2,8 +2,6 @@
 GRUNNER_TOP_DIR=$(dirname $(dirname  $(readlink -f $0)))
 . $GRUNNER_TOP_DIR/bin/lxc_env
 
-DEPLOY_ENV_FILE=/tmp/deploy.env
-
 usage() {
     NO_HEADER=y die '
 Executes tests inside a setup-ed container
@@ -23,7 +21,6 @@ Executes tests inside a setup-ed container
 }
 parse_cli() { parse_cli_common "${@}"; }
 parse_cli "$@"
-save_to_env_file
 
 if [[ -z $NO_TEST ]];then
     ansible_play_vars="${TEST_ANSIBLE_VARS}" \
@@ -33,6 +30,5 @@ else
 fi
 ret=$?
 
-remove_env_file
 exit ${ret}
 # vim:set et sts=4 ts=4 tw=80:

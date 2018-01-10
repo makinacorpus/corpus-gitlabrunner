@@ -54,11 +54,6 @@ DEFAULT_TEST_LXC_TEST_PLAYBOOKS="$(first_found_file test.yml \
     "$GRUNNER_TOP_DIR/ansible/playbooks/lxc/lifecycle")"
 TEST_LXC_TEST_PLAYBOOKS=${TEST_LXC_TEST_PLAYBOOKS-${DEFAULT_TEST_LXC_TEST_PLAYBOOKS}}
 
-set_deploy_env_file() {
-    TEST_DEPLOY_ENV_FILE=/lxc-${TEST_LXC_NAME}_${TEST_ORIGIN_PATH}_${TEST_PROJECT_PATH}_${TEST_COMMIT}_${TEST_COMMIT_REF_NAME}.env
-    TEST_DEPLOY_ENV_FILE=${TMPDIR:-/tmp}/${TEST_DEPLOY_ENV_FILE//\//}
-}
-
 re_export_vars
 if echo "${0}" | egrep -q 'lxc_env$';then
     if declare -f "$1" >/dev/null 2>&1; then
