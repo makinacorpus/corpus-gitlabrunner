@@ -565,7 +565,7 @@ get_ansible_connection() {
 }
 
 ansible_playbook_() {
-    local ansible_verbose=
+    local ansible_verbose=${ANSIBLE_VERBOSE:-}
     if [[ -n ${DEBUG} ]];then
         ansible_verbose=-vvvvv
     fi
@@ -580,7 +580,7 @@ ansible_playbook_() {
 }
 
 ansible_() {
-    local ansible_verbose=
+    local ansible_verbose=${ANSIBLE_VERBOSE:-}
     if [[ -n ${DEBUG} ]];then
         ansible_verbose=-vvvvv
     fi
