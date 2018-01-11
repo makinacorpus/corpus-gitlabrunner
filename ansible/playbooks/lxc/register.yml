@@ -1,5 +1,6 @@
 ---
-# add dynamically a lxc container to the current ansible inventory.
+# add dinamically a lxc container to the current
+# ansible inventory.
 # This will allow us to reference the container
 # by its name in further tasks/roles
 - import_playbook: "{{GRUNNER_TOP_DIR}}/ansible/playbooks/lxc/vars.yml"

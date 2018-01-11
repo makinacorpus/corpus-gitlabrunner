@@ -11,7 +11,7 @@
         content: |
          ---
          {% set map_vars = {
-           'TEST_USE_MAKINASTATES': ( TEST_USE_MAKINASTATES|default(true) ) | copsf_asbool,
+           'TEST_USE_MAKINASTATES': ( TEST_USE_MAKINASTATES|default(true) ) | bool,
          } %}
          {% set vaults = [] %}
          {% for i in TEST_ANSIBLE_VAULTS.split() %}
