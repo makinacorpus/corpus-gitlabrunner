@@ -2,4 +2,7 @@
 - include: "{{GRUNNER_TOP_DIR}}/ansible/playbooks/lxc/register.yml"
 - include: "{{GRUNNER_TOP_DIR}}/ansible/playbooks/lifecycle/dt_sync.yml"
   vars:
+      test_node: localhost
+- include: "{{GRUNNER_TOP_DIR}}/ansible/playbooks/lifecycle/dt_sync.yml"
+  vars:
       test_node: "{{TEST_LXC_NAME}}"
