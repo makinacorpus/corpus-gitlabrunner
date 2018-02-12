@@ -7,6 +7,10 @@
       {{cops_gci_cops_root}}/bin/install.sh -C
     {% if cops_gci_update %}
     else
+      cd {{cops_gci_cops_root}}
+      if ( git diff -q --exit-code);then
+        git pull
+      fi
       {{cops_gci_cops_root}}/bin/install.sh -C -s
     {% endif %}
     fi

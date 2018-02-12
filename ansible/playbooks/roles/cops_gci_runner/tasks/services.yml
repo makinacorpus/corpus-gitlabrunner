@@ -33,4 +33,7 @@
     name: "{{item}}"
   with_items: ["{{cops_gci_service}}"]
   when: "corpusops_vars.has_services_manager"
-
+- shell: /bin/true
+  notify: restart_cops_gci_service
+  when: FORCE_RESTART_GITLAB_RUNNER|default(false)
+- meta: flush_handlers

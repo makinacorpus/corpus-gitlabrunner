@@ -1,5 +1,7 @@
 ---
 - hosts: "all"
-  roles:
-    - role: "corpusops.roles/vars"
-    - role: "cops_gci_runner"
+  tasks:
+    - include_role: {name: corpusops.roles/vars}
+      tags: [runner]
+    - include_role: {name: cops_gci_runner}
+      tags: [runner]

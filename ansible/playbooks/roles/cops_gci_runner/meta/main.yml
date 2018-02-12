@@ -1,6 +1,3 @@
 ---
-dependencies: [
-  {role: "corpusops.roles/humanlog"},
-  {role: "corpusops.roles/vars"},
-  {role: "cops_gci_vars"}
-]
+dependencies:
+- role: "cops_gci_vars"
