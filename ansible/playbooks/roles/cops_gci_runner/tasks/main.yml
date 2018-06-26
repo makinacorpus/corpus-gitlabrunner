@@ -1,6 +1,7 @@
 ---
-- debug: msg="OK"
-  failed_when: "not(cops_gci_url and cops_gci_registration_token)"
+- assert:
+    that: "(cops_gci_url and cops_gci_registration_token)|copsf_asbool"
+    msg: "set cops_gci_registration_token and cops_gci_url"
 - {include_tasks: deploy_tools.yml,   tags: [runner_deploy_tools]}
 - {include_tasks: glue.yml,           tags: [runner_glue]}
 - {include_tasks: install_runner.yml, tags: [runner_install]}
