@@ -1,7 +1,7 @@
 ---
 - name: "register runners service"
   shell: |
-      set -e
+      set -ex
       if [ -e /etc/systemd/system/gitlab-runner.service ] && \
         grep -q "{{cops_gci_runner_dir}}" "{{cops_gci_sdunit}}";then
         exit 0  # exists & correctly configured
@@ -22,6 +22,7 @@
       echo "services updated" >&2
   register: cops_gci_services_
   changed_when: "'services updated' in cops_gci_services_.stderr"
+  no_log: "{{not (cops_secret_vars_debug|default(false))}}"
   notify: [restart_cops_gci_service]
 - {debug: {msg: "{{cops_gci_services_}}"}}
 - name: service

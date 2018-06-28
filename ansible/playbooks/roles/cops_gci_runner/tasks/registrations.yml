@@ -15,6 +15,7 @@
       {%-  if nopt in ['tag_list'] %}{% set val = ','.join(val) %}{% endif %}
       {%-  if val is not none %}{% set _ = opts.append((opt, val)) %}{% endif %}
       {%- endfor %}
+      set -ex
       if ! (grep -q '  name = "{{runner}}"' "/etc/gitlab-runner/config.toml");then
           echo "didregistration {{runner}}" >&2
           gitlab-ci-multi-runner register -n\
@@ -23,6 +24,7 @@
             {{opt}}="{{val}}"\
             {% endfor %};
       fi
+  no_log: "{{not (cops_secret_vars_debug|default(false))}}"
   register: cops_gci_registrations
   with_dict: "{{cops_gci_runners}}"
   changed_when: "'didregistration {0}'.format(item.key) in cops_gci_registrations.stderr"
