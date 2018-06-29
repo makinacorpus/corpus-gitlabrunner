@@ -1,4 +1,5 @@
 ---
+cops_gci_pkgs: [gitlab-runner, cdebootstrap]
 cops_gci_sdunit: /etc/systemd/system/gitlab-runner.service
 cops_gci_cops_url: "https://github.com/corpusops/corpusops.bootstrap.git"
 cops_gci_ms_url: "https://github.com/makinacorpus/makina-states.git"
