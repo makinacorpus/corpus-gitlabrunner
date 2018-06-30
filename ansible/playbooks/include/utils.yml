@@ -1,2 +1,3 @@
-- {include: "./util.yml", vars: {util: rsync}}
-- {include: "./util.yml", vars: {util: git}}
+---
+- {include_tasks: "./util.yml", vars: {util: rsync}}
+- {include_tasks: "./util.yml", vars: {util: git}}
