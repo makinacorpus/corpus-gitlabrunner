@@ -594,18 +594,22 @@ ansible_() {
         ; );
 }
 
-ansible_play() {
-    local ret=0
+ansible_play_one() {
     local vars=${ansible_play_vars:-}
+    local play=$1
+    shift
+    ansible_playbook_ $play -e "$ansible_play_vars" "${@-}"
+    ret=$?
+    return $ret
+}
+
+ansible_play() {
     for play in $@;do
-        ansible_playbook_ $play -e "$ansible_play_vars"
-        ret=$?
-        if [ "x${ret}" != "x0" ];then
+        if ! ( ansible_play_one $play );then
             warn "playbook $play failed"
-            break
+            return 1
         fi
     done
-    return $ret
 }
 
 first_found_file() {
@@ -628,6 +632,8 @@ print_env_vars() {
 
 set_ansible_path() {
     for i in \
+        $HOME/corpusops/corpusops.bootstrap/ \
+        $HOME/corpusops.bootstrap/ \
         /srv/corpusops.bootstrap \
         /srv/corpusops/corpusops.bootstrap \
         ;do

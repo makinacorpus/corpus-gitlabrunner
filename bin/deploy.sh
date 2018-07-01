@@ -34,43 +34,47 @@ if [[ -n $NO_DEPLOY ]];then
 fi
 
 ### SYNC CODE
-
 if [[ -z $NO_DT_SYNC ]];then
-    ansible_play_vars="${TEST_ANSIBLE_VARS}" \
-        vv silent_run ansible_play \
-            $TEST_DT_SYNC_PLAYBOOKS
-    die_in_error "ansible playbook -DT sync- failed"
+    for i in $TEST_DT_SYNC_PLAYBOOKS;do
+        ansible_play_vars="${TEST_ANSIBLE_VARS}" \
+            vv silent_run ansible_play_one ${@-}\
+                "$i" "$@"
+        die_in_error "ansible playbook -DT sync- failed: $i"
+    done
 else
     warn "Skip sync DT step"
 fi
 
+### SYNC
 if [[ -z $NO_SYNC ]];then
-    ansible_play_vars="${TEST_ANSIBLE_VARS}" \
-        vv silent_run ansible_play \
-            $TEST_SYNC_CODE_PLAYBOOKS
-    die_in_error "ansible playbook -sync- failed"
+    for i in $TEST_SYNC_CODE_PLAYBOOKS;do
+        ansible_play_vars="${TEST_ANSIBLE_VARS}" \
+            vv silent_run ansible_play_one \
+                "$i" "${@-}"
+        die_in_error "ansible playbook -sync- failed: $i"
+    done
 else
     warn "Skip sync code step"
 fi
 
 ### SETUP
-
 if [[ -z $NO_SETUP ]];then
-    ansible_play_vars="${TEST_ANSIBLE_VARS}" \
-        vv silent_run ansible_play \
-            $TEST_ENV_SETUP_PLAYBOOKS
-    die_in_error "ansible playbook -setup- failed"
+    for i in $TEST_ENV_SETUP_PLAYBOOKS;do
+        ansible_play_vars="${TEST_ANSIBLE_VARS}" \
+            vv silent_run ansible_play_one \
+                "$i" "${@-}"
+        die_in_error "ansible playbook -setup- failed: $i"
+    done
 else
     warn "Skip setup step"
 fi
 
 ### EXTRAS/POST
-
 if [[ -z $NO_DEPLOY_EXTRAS ]];then
     if [[ -n ${TEST_DEPLOY_PLAYBOOKS-} ]];then
         for i in ${TEST_DEPLOY_PLAYBOOKS:-};do
             ansible_play_vars="${TEST_ANSIBLE_VARS}" \
-                vv silent_run ansible_play "${i}"
+                vv silent_run ansible_play_one "${i}" "${@-}"
             die_in_error "ansible playbook -${i}- failed"
         done
     fi
