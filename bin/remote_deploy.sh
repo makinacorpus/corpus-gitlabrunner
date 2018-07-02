@@ -1,7 +1,7 @@
 #!/usr/bin/env bash
 GRUNNER_TOP_DIR=$(dirname $(dirname  $(readlink -f $0)))
 if [[ -z $TEST_COMMIT_REF_NAME ]] && [[ -z $TEST_ENVIRONMENT_NAME ]];then
-    echo  "set at least TEST_ENVIRONMENT_NAME pr TEST_COMMIT_REF_NAME" >&2
+    echo  "set at least TEST_ENVIRONMENT_NAME or TEST_COMMIT_REF_NAME" >&2
     exit 2
 fi
 if [[ -z $TEST_COMMIT_REF_NAME ]] && [[ -n $TEST_ENVIRONMENT_NAME ]];then
@@ -41,5 +41,6 @@ parse_cli() {
 }
 parse_cli "$@"
 exec $GRUNNER_TOP_DIR/bin/deploy.sh \
-    -e "{test_node: $TEST_COMMIT_REF_NAME, inc_node:  $TEST_COMMIT_REF_NAME}" $@;
+    -e "{test_node: $TEST_COMMIT_REF_NAME, inc_node:  $TEST_COMMIT_REF_NAME}" \
+    "$@"
 # vim:set et sts=4 ts=4 tw=80:

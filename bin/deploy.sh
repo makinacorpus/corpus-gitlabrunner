@@ -37,8 +37,7 @@ fi
 if [[ -z $NO_DT_SYNC ]];then
     for i in $TEST_DT_SYNC_PLAYBOOKS;do
         ansible_play_vars="${TEST_ANSIBLE_VARS}" \
-            vv silent_run ansible_play_one ${@-}\
-                "$i" "$@"
+            vv silent_run ansible_play_one "$i" "${@-}"
         die_in_error "ansible playbook -DT sync- failed: $i"
     done
 else
@@ -49,8 +48,7 @@ fi
 if [[ -z $NO_SYNC ]];then
     for i in $TEST_SYNC_CODE_PLAYBOOKS;do
         ansible_play_vars="${TEST_ANSIBLE_VARS}" \
-            vv silent_run ansible_play_one \
-                "$i" "${@-}"
+            vv silent_run ansible_play_one "$i" "${@-}"
         die_in_error "ansible playbook -sync- failed: $i"
     done
 else
@@ -61,8 +59,7 @@ fi
 if [[ -z $NO_SETUP ]];then
     for i in $TEST_ENV_SETUP_PLAYBOOKS;do
         ansible_play_vars="${TEST_ANSIBLE_VARS}" \
-            vv silent_run ansible_play_one \
-                "$i" "${@-}"
+            vv silent_run ansible_play_one "$i" "${@-}"
         die_in_error "ansible playbook -setup- failed: $i"
     done
 else
