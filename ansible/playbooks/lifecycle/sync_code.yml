@@ -15,34 +15,22 @@
       when: "TEST_USE_MAKINASTATES"
       tags: project_sync
     - name: "init project skeleton -- dir"
-      shell: |
-        mkdir -pv  "{{TEST_PROJECT_PATH}}/.git"
+      file:
+        state: directory
+        path: "{{TEST_PROJECT_PATH}}/.git"
       tags: project_sync
       when: "not TEST_USE_MAKINASTATES"
-    - debug: msg={{TEST_ORIGIN}}
     - name: Synchronise project code to container
       synchronize:
+        ssh_args: >-
+          {{ ansible_ssh_args        | default(ansible_ssh_args       |default('')) }}
+          {{ ansible_ssh_common_args | default(ansible_ssh_common_args|default('')) }}
+          {{ ansible_ssh_extra_args  | default(ansible_ssh_extra_args |default('')) }}
         compress: false
+        set_remote_user: false
         src: "{{TEST_ORIGIN_PATH}}/.git/"
         dest: "{{TEST_PROJECT_PATH}}/.git/"
-        ssh_args: >-
-          prout
-          {% set k = hostvars[inventory_hostname].get(
-                        'ansible_ssh_private_key_file', '') %}
-          {% if k%}-o IdentityFile={{k}} -o IdentitiesOnly=yes{%endif%}
-          {% if (
-              hostvars[inventory_hostname].ansible_connection|default('ssh')
-             ) not in [ 'smart', 'local'] %}
-          {{ hostvars[inventory_hostname].ssh_args | default('') }}
-          {{ hostvars[inventory_hostname].ansible_ssh_args | default('') }}
-          {{ hostvars[inventory_hostname].ansible_ssh_common_args | default('') }}
-          {{ hostvars[inventory_hostname].ansible_ssh_extra_args | default('') }}
-          {% endif %}
-          rsync_opts:
-          - '-a'
-          - '-z'
-          - '-v'
-          - '--exclude=config'
+        rsync_opts: ['-a', '-z', '-v', '--exclude=config']
       delegate_to: "{{TEST_ORIGIN}}"
       tags: project_sync
     - name: Stash any changes
