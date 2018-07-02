@@ -598,7 +598,7 @@ ansible_play_one() {
     local vars=${ansible_play_vars:-}
     local play=$1
     shift
-    ansible_playbook_ $play -e "$ansible_play_vars" "${@-}"
+    ansible_playbook_ $play -e "$ansible_play_vars" "${@}"
     ret=$?
     return $ret
 }

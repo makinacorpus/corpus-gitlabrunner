@@ -1,0 +1,17 @@
+---
+- include: "{{GRUNNER_TOP_DIR}}/ansible/playbooks/vars.yml"
+  vars: {inc_node: "{{controller|default('localhost')}}"}
+- hosts: "{{controller|default('localhost')}}"
+  tasks:
+  - debug: {msg: "{{djangoteleporter_ssh_key_priv}}"}
+  - when: "djangoteleporter_ssh_key_priv|default(false)"
+    block:
+    - file:
+        state: directory
+        dest: "{{TEST_ORIGIN_PATH}}/local/.ssh"
+        mode: "0700"
+    - copy:
+        dest: "{{TEST_ORIGIN_PATH}}/local/.ssh/deploy_key"
+        force: true
+        mode: "0600"
+        content: "{{djangoteleporter_ssh_key_priv}}"

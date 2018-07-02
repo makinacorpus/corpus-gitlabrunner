@@ -13,6 +13,7 @@ Run deploy procedure:
 
  [NOCOLOR=y] \
  [NO_DEPLOY=y] \
+ [NO_KEY_SETUP=y] \
  [NO_DT_SYNC=y] \
  [NO_SETUP=y] \
  [NO_DEPLOY_EXTRAS=y] \
@@ -34,21 +35,31 @@ if [[ -n $NO_DEPLOY ]];then
 fi
 
 ### SYNC CODE
+
+if [[ -z $NO_KEY_SETUP ]];then
+    ansible_play_vars="${TEST_ANSIBLE_VARS}" \
+    vv silent_run ansible_play_one \
+        "$GRUNNER_TOP_DIR/ansible/playbooks/lifecycle/setup_sshkeys.yml"
+    die_in_error "ansible playbook -sshkey- failed"
+else
+    warn "Skip ssh key setup"
+fi
 if [[ -z $NO_DT_SYNC ]];then
     for i in $TEST_DT_SYNC_PLAYBOOKS;do
         ansible_play_vars="${TEST_ANSIBLE_VARS}" \
-            vv silent_run ansible_play_one "$i" "${@-}"
+            vv silent_run ansible_play_one "$i" "${@}"
         die_in_error "ansible playbook -DT sync- failed: $i"
     done
 else
     warn "Skip sync DT step"
 fi
 
+set -x
 ### SYNC
 if [[ -z $NO_SYNC ]];then
     for i in $TEST_SYNC_CODE_PLAYBOOKS;do
         ansible_play_vars="${TEST_ANSIBLE_VARS}" \
-            vv silent_run ansible_play_one "$i" "${@-}"
+            vv silent_run ansible_play_one "$i" "${@}"
         die_in_error "ansible playbook -sync- failed: $i"
     done
 else
@@ -71,7 +82,7 @@ if [[ -z $NO_DEPLOY_EXTRAS ]];then
     if [[ -n ${TEST_DEPLOY_PLAYBOOKS-} ]];then
         for i in ${TEST_DEPLOY_PLAYBOOKS:-};do
             ansible_play_vars="${TEST_ANSIBLE_VARS}" \
-                vv silent_run ansible_play_one "${i}" "${@-}"
+                vv silent_run ansible_play_one "${i}" "${@}"
             die_in_error "ansible playbook -${i}- failed"
         done
     fi

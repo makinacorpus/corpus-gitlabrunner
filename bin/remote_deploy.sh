@@ -41,6 +41,6 @@ parse_cli() {
 }
 parse_cli "$@"
 exec $GRUNNER_TOP_DIR/bin/deploy.sh \
-    -e "{test_node: $TEST_COMMIT_REF_NAME, inc_node:  $TEST_COMMIT_REF_NAME}" \
+    -e "{test_node: $TEST_COMMIT_REF_NAME, inc_node: $TEST_COMMIT_REF_NAME}" \
     "$@"
 # vim:set et sts=4 ts=4 tw=80:
