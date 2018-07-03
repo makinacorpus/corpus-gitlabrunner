@@ -45,7 +45,8 @@
         cd {{TEST_PROJECT_PATH}}
         set -ex
         git remote rm gitremote || :
-        git remote add -f gitremote $(pwd)/../.gitremote
+        git remote add gitremote $(pwd)/../.gitremote
+        git fetch -k gitremote 
         git reset --hard {{TEST_COMMIT}}
       tags: project_sync
     - name: fix perms
