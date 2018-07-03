@@ -54,7 +54,6 @@ else
     warn "Skip sync DT step"
 fi
 
-set -x
 ### SYNC
 if [[ -z $NO_SYNC ]];then
     for i in $TEST_SYNC_CODE_PLAYBOOKS;do
