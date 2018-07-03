@@ -30,7 +30,7 @@
         set_remote_user: false
         src: "{{TEST_ORIGIN_PATH}}/.git/"
         dest: "{{TEST_PROJECT_PATH}}/../.gitremote/"
-        rsync_opts: ['-a', '-z', '-v', '--exclude=config']
+        rsync_opts: ["-cavz"]
       delegate_to: "{{TEST_ORIGIN}}"
       tags: project_sync
     - name: Stash any changes
@@ -45,8 +45,7 @@
         cd {{TEST_PROJECT_PATH}}
         set -ex
         git remote rm gitremote || :
-        git remote add gitremote $(pwd)/../.gitremote
-        git fetch gitremote
+        git remote add -f gitremote $(pwd)/../.gitremote
         git reset --hard {{TEST_COMMIT}}
       tags: project_sync
     - name: fix perms
