@@ -47,7 +47,7 @@
         git remote rm gitremote || :
         git remote add gitremote $(pwd)/../.gitremote
         git fetch --recurse-submodules=yes gitremote 
-        rsync -azv $(pwd)/../.gitremote/objects/ .git/.objects/
+        rsync -azv $(pwd)/../.gitremote/objects/ .git/objects/
         git reset --hard {{TEST_COMMIT}}
       tags: project_sync
     - name: fix perms
