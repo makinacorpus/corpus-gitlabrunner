@@ -1,7 +1,9 @@
 #!/usr/bin/env bash
 OW=$(pwd)
 GRUNNER_TOP_DIR=$(dirname $(dirname  $(readlink -f $0)))
+FORWARD_ENV_VARS=${FORWARD_ENV_VARS-1}
 . $GRUNNER_TOP_DIR/bin/shell_common
+set_ansible_playbook_func
 if get_all_variables | grep -q TEST_LXC; then
     . $GRUNNER_TOP_DIR/bin/lxc_env
 fi
@@ -9,11 +11,11 @@ cd "$OW"
 ret=666
 if [[ -n ${SILENT-} ]];then
     ansible_play_vars="${TEST_ANSIBLE_VARS}" \
-        vv silent_run ansible_playbook_ "${@}"
+        vv silent_run $AP_FUNC "${@}"
     ret=$?
 else
     ansible_play_vars="${TEST_ANSIBLE_VARS}" \
-        ansible_playbook_ "${@}"
+        $AP_FUNC "${@}"
     ret=$?
 fi
 exit ${ret}

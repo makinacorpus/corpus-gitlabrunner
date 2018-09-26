@@ -1,6 +1,8 @@
 #!/usr/bin/env bash
 cd $(dirname "$0")/..
+FORWARD_ENV_VARS=${FORWARD_ENV_VARS-}
 . bin/shell_common
-ansible_playbook_ \
+set_ansible_playbook_func
+$AP_FUNC \
     -e "GRUNNER_TOP_DIR=$GRUNNER_TOP_DIR" \
     "${@}"

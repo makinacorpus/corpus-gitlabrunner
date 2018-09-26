@@ -693,4 +693,11 @@ remove_env_file() {
         fi
     fi
 }
+set_ansible_playbook_func() {
+    if [[ -n ${FORWARD_ENV_VARS-} ]];then
+        AP_FUNC=ansible_play_one_
+    else
+        AP_FUNC=ansible_playbook_
+    fi
+}
 # vim:set et sts=4 ts=4 tw=0:
