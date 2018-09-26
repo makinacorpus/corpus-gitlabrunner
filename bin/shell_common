@@ -695,7 +695,7 @@ remove_env_file() {
 }
 set_ansible_playbook_func() {
     if [[ -n ${FORWARD_ENV_VARS-} ]];then
-        AP_FUNC=ansible_play_one_
+        AP_FUNC=ansible_play_one
     else
         AP_FUNC=ansible_playbook_
     fi
