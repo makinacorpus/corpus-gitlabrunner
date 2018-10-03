@@ -1,5 +1,5 @@
 #!/usr/bin/env bash
-GRUNNER_TOP_DIR=$(dirname $(dirname  $(readlink -f $0)))
+export GRUNNER_TOP_DIR=$(dirname $(dirname  $(readlink -f $0)))
 
 . $GRUNNER_TOP_DIR/bin/deploy_env
 
