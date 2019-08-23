@@ -3,7 +3,8 @@
   vars: {inc_node: "{{controller|default('localhost')}}"}
 - hosts: "{{controller|default('localhost')}}"
   tasks:
-  - debug: {msg: "{{djangoteleporter_ssh_key_priv}}"}
+  - debug: {msg: "{{djangoteleporter_ssh_key_priv|default(false)}}"}
+    no_log: "{{not (cops_secret_vars_debug|default(false))}}"
   - when: "djangoteleporter_ssh_key_priv|default(false)"
     block:
     - file:
